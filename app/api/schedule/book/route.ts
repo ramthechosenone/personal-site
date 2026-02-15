@@ -1,7 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createCalendarEvent } from "@/lib/google-calendar";
 
+const ENV_KEYS = [
+  "GOOGLE_CALENDAR_ID",
+  "GOOGLE_SERVICE_ACCOUNT_EMAIL",
+  "GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY",
+] as const;
+
+function getMissingEnvVars(): string[] {
+  return ENV_KEYS.filter((key) => !process.env[key]?.trim());
+}
+
 export async function POST(request: NextRequest) {
+  const missing = getMissingEnvVars();
+  if (missing.length > 0) {
+    return NextResponse.json(
+      {
+        error: `Missing environment variables: ${missing.join(", ")}. Add them in Vercel → Project → Settings → Environment Variables, then redeploy.`,
+      },
+      { status: 503 }
+    );
+  }
   try {
     const body = await request.json();
     const {

@@ -43,6 +43,8 @@ export default function ScheduleFriendsPage() {
   const [booked, setBooked] = useState<{ link?: string } | null>(null);
   const [showFullSchedule, setShowFullSchedule] = useState(false);
   const [gameArrived, setGameArrived] = useState(false);
+  const [currentSlotIndex, setCurrentSlotIndex] = useState(0);
+  const [runKey, setRunKey] = useState(0);
   const runStarted = useRef(false);
 
   useEffect(() => {
@@ -96,9 +98,16 @@ export default function ScheduleFriendsPage() {
       .finally(() => setSubmitting(false));
   };
 
-  const firstSlot = slots?.[0] ?? null;
+  const displayedSlot = slots?.[currentSlotIndex] ?? slots?.[0] ?? null;
+  const hasNextSlot = slots && currentSlotIndex < slots.length - 1;
   const grouped = slots ? groupSlotsByDate(slots) : null;
   const showGame = slots && slots.length > 0 && !showFullSchedule && !selected && !booked;
+
+  const goToNextSlot = () => {
+    if (!slots || currentSlotIndex >= slots.length - 1) return;
+    setRunKey((k) => k + 1);
+    setTimeout(() => setCurrentSlotIndex((i) => Math.min(i + 1, slots.length - 1)), RUN_DURATION * 1000);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -109,15 +118,9 @@ export default function ScheduleFriendsPage() {
           transition={{ duration: 0.5 }}
           className="text-center mb-8"
         >
-          <h1
-            className="text-xl md:text-2xl font-medium text-text-primary mb-2"
-            style={{ fontFamily: "'Press Start 2P', monospace" }}
-          >
+          <h1 className="text-xl md:text-2xl font-medium text-text-primary">
             Grab a slot
           </h1>
-          <p className="text-text-subtle text-sm md:text-base">
-            Next 3 days, including weekends.
-          </p>
         </motion.div>
 
         {loading && (
@@ -251,14 +254,12 @@ export default function ScheduleFriendsPage() {
               className="space-y-8"
             >
               {/* Track: walk through time */}
-              <div
-                className="relative h-24 rounded-lg bg-elevated border border-border overflow-hidden"
-                style={{ fontFamily: "'Press Start 2P', monospace" }}
-              >
+              <div className="relative h-24 rounded-lg bg-elevated border border-border overflow-hidden">
                 <div className="absolute inset-0 flex items-center px-2">
                   <div className="flex-1 h-3 rounded-full bg-border/60" />
                 </div>
                 <motion.div
+                  key={runKey}
                   className="absolute bottom-4 left-4 w-10 h-10 flex items-center justify-center"
                   initial={{ x: 0 }}
                   animate={{ x: 240 }}
@@ -267,7 +268,6 @@ export default function ScheduleFriendsPage() {
                     ease: "linear",
                   }}
                 >
-                  {/* Simple runner (dino-style) */}
                   <svg
                     width="32"
                     height="32"
@@ -282,37 +282,50 @@ export default function ScheduleFriendsPage() {
                     <ellipse cx="22" cy="9" rx="2" ry="1.5" fill="#111" />
                   </svg>
                 </motion.div>
-                <div className="absolute right-4 bottom-4 text-text-subtle text-[8px] md:text-[10px]">
-                  next slot →
-                </div>
+                {hasNextSlot && (
+                  <button
+                    type="button"
+                    onClick={goToNextSlot}
+                    className="absolute right-4 bottom-4 text-text-subtle text-[8px] md:text-[10px] hover:text-text-primary transition-colors"
+                  >
+                    next slot →
+                  </button>
+                )}
               </div>
 
               <AnimatePresence>
-                {gameArrived && firstSlot && (
+                {gameArrived && displayedSlot && (
                   <motion.div
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
+                    key={currentSlotIndex}
                     className="rounded-xl bg-elevated border border-border p-6 text-center space-y-4"
                   >
-                    <p
-                      className="text-text-primary text-sm"
-                      style={{ fontFamily: "'Press Start 2P', monospace" }}
-                    >
+                    <p className="text-text-primary text-sm font-medium">
                       Next up
                     </p>
                     <p className="text-text-primary font-medium text-lg">
-                      {firstSlot.startLocal}
+                      {displayedSlot.startLocal}
                     </p>
-                    <p className="text-text-subtle text-sm">to {firstSlot.endLocal.split(", ").pop()}</p>
+                    <p className="text-text-subtle text-sm">to {displayedSlot.endLocal.split(", ").pop()}</p>
                     <div className="flex flex-wrap gap-3 justify-center pt-2">
                       <button
                         type="button"
-                        onClick={() => setSelected(firstSlot)}
+                        onClick={() => setSelected(displayedSlot)}
                         className="px-4 py-2.5 rounded-lg bg-text-primary text-background text-sm font-medium hover:opacity-90 transition-opacity"
                       >
                         Take this slot
                       </button>
+                      {hasNextSlot && (
+                        <button
+                          type="button"
+                          onClick={goToNextSlot}
+                          className="px-4 py-2.5 rounded-lg border border-border text-text-subtle text-sm hover:bg-elevated transition-colors"
+                        >
+                          Next slot →
+                        </button>
+                      )}
                       <button
                         type="button"
                         onClick={() => setShowFullSchedule(true)}

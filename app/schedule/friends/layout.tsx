@@ -14,13 +14,5 @@ export default function ScheduleFriendsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-        rel="stylesheet"
-      />
-      {children}
-    </>
-  );
+  return children;
 }

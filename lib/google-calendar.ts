@@ -5,7 +5,7 @@ import { fromZonedTime } from "date-fns-tz";
 const SLOT_MINUTES = 30;
 const WORK_START_HOUR = 9;
 const WORK_END_HOUR = 17;
-const DAYS_AHEAD = 14;
+const DEFAULT_DAYS_AHEAD = 14;
 
 function getCalendarClient() {
   const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
@@ -37,18 +37,25 @@ export interface TimeSlot {
   endLocal: string;
 }
 
+export interface GetAvailableSlotsOptions {
+  daysAhead?: number;
+  includeWeekends?: boolean;
+}
+
 /**
  * Get available time slots. Uses freebusy so event details are never exposed.
  * Returns only start/end times for slots that are free within working hours.
  */
 export async function getAvailableSlots(
-  timezone: string = "America/Los_Angeles"
+  timezone: string = "America/Los_Angeles",
+  options: GetAvailableSlotsOptions = {}
 ): Promise<TimeSlot[]> {
+  const { daysAhead = DEFAULT_DAYS_AHEAD, includeWeekends = false } = options;
   const { calendar, calendarId } = getCalendarClient();
 
   const now = new Date();
   const endDate = new Date(now);
-  endDate.setDate(endDate.getDate() + DAYS_AHEAD);
+  endDate.setDate(endDate.getDate() + daysAhead);
 
   const timeMin = now.toISOString();
   const timeMax = endDate.toISOString();
@@ -87,14 +94,16 @@ export async function getAvailableSlots(
     day: "numeric",
     weekday: "short",
   });
-  for (let d = 0; d < DAYS_AHEAD; d++) {
+  for (let d = 0; d < daysAhead; d++) {
     const ref = addDays(now, d);
     const parts = datePartsFormatter.formatToParts(ref);
     const y = parseInt(parts.find((p) => p.type === "year")!.value, 10);
     const m = parseInt(parts.find((p) => p.type === "month")!.value, 10) - 1;
     const day = parseInt(parts.find((p) => p.type === "day")!.value, 10);
-    const weekday = parts.find((p) => p.type === "weekday")!.value;
-    if (weekday === "Sat" || weekday === "Sun") continue;
+    if (!includeWeekends) {
+      const weekday = parts.find((p) => p.type === "weekday")!.value;
+      if (weekday === "Sat" || weekday === "Sun") continue;
+    }
 
     for (let hour = WORK_START_HOUR; hour < WORK_END_HOUR; hour++) {
       for (let minute = 0; minute < 60; minute += SLOT_MINUTES) {

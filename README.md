@@ -109,6 +109,13 @@ colors: {
 }
 ```
 
+### Hiding Work and Personal content until ready
+
+The home page always shows the sphere and the Personal/Work buttons (and their behavior). The **content** of the Work and Personal pages is hidden until you turn it on:
+
+- **`NEXT_PUBLIC_SHOW_WORK_AND_PERSONAL`** = `true` — `/work` and `/personal` show their full content (case studies, pill keys, etc.). Set this in Vercel (or `.env.local`) when you’re ready to publish.
+- Leave unset or set to anything else — Visiting `/work` or `/personal` shows a simple “In the works — check back soon.” with a back button. The sphere and labels on the home page still work and navigate to these placeholder pages.
+
 ### Content
 
 - Work sections: Edit `app/work/page.tsx`

@@ -26,7 +26,13 @@ export async function GET(request: NextRequest) {
   try {
     const timezone =
       request.nextUrl.searchParams.get("timezone") || DEFAULT_TIMEZONE;
-    const slots = await getAvailableSlots(timezone);
+    const daysParam = request.nextUrl.searchParams.get("days");
+    const daysAhead = daysParam ? Math.min( Math.max(1, parseInt(daysParam, 10)), 30 ) : undefined;
+    const includeWeekends = request.nextUrl.searchParams.get("weekends") === "true" || request.nextUrl.searchParams.get("weekends") === "1";
+    const slots = await getAvailableSlots(timezone, {
+      ...(daysAhead && { daysAhead }),
+      includeWeekends,
+    });
     return NextResponse.json({ slots });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed to load availability";

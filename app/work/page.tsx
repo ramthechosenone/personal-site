@@ -50,14 +50,32 @@ const itemVariants = {
   },
 };
 
+const showContent = process.env.NEXT_PUBLIC_SHOW_WORK_AND_PERSONAL === "true";
+
 export default function Work() {
   const [backgroundPhase, setBackgroundPhase] = useState<"warm" | "cool">("warm");
 
   useEffect(() => {
-    // Start background transition
     const bgTimer = setTimeout(() => setBackgroundPhase("cool"), 200);
     return () => clearTimeout(bgTimer);
   }, []);
+
+  if (!showContent) {
+    return (
+      <SiteShell>
+        <BackButton />
+        <div className="min-h-screen flex flex-col items-center justify-center px-4">
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-text-subtle text-center"
+          >
+            In the works — check back soon.
+          </motion.p>
+        </div>
+      </SiteShell>
+    );
+  }
 
   return (
     <motion.div

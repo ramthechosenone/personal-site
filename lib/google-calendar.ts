@@ -156,11 +156,13 @@ export async function createCalendarEvent(input: CreateEventInput): Promise<{ ev
   const summary = input.summary ?? `Meeting with ${input.attendeeName || input.attendeeEmail}`;
   const description = [
     input.description,
-    input.attendeeName && `Guest: ${input.attendeeName} (${input.attendeeEmail})`,
+    input.attendeeName ? `Guest: ${input.attendeeName} (${input.attendeeEmail})` : `Guest: ${input.attendeeEmail}`,
   ]
     .filter(Boolean)
     .join("\n\n");
 
+  // Don't add attendees to the event body — service accounts can't invite without domain-wide delegation.
+  // Guest info is in the description so you know who booked; they use the event link to add to their calendar.
   const event = await calendar.events.insert({
     calendarId,
     requestBody: {
@@ -168,9 +170,7 @@ export async function createCalendarEvent(input: CreateEventInput): Promise<{ ev
       description: description || undefined,
       start: { dateTime: input.start, timeZone: "UTC" },
       end: { dateTime: input.end, timeZone: "UTC" },
-      attendees: [{ email: input.attendeeEmail, displayName: input.attendeeName }],
     },
-    sendUpdates: "none", // service accounts can't send invites without domain-wide delegation; event link still works for guest to add
   });
 
   return {

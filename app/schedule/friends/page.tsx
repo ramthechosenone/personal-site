@@ -135,7 +135,15 @@ export default function ScheduleFriendsPage() {
           </h1>
         </motion.div>
 
-        {loading && <LoadingDuck />}
+        {loading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="rounded-xl bg-elevated border border-border p-6 flex items-center justify-center min-h-[200px]"
+          >
+            <LoadingDuck />
+          </motion.div>
+        )}
 
         {error && !loading && (
           <motion.div

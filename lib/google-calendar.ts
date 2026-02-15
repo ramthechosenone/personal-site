@@ -170,7 +170,7 @@ export async function createCalendarEvent(input: CreateEventInput): Promise<{ ev
       end: { dateTime: input.end, timeZone: "UTC" },
       attendees: [{ email: input.attendeeEmail, displayName: input.attendeeName }],
     },
-    sendUpdates: "all", // send calendar invite to attendee
+    sendUpdates: "none", // service accounts can't send invites without domain-wide delegation; event link still works for guest to add
   });
 
   return {

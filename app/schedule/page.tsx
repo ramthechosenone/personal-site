@@ -138,7 +138,7 @@ export default function SchedulePage() {
             >
               <p className="text-text-primary font-medium mb-2">You’re all set</p>
               <p className="text-text-subtle text-sm mb-4">
-                Check your email for the calendar invite. The event is on my calendar too.
+                The event is on my calendar. Use the link below to add it to yours (you won’t get an email from Google).
               </p>
               {booked.link && (
                 <a

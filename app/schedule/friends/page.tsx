@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import KeyCard from "@/components/common/KeyCard";
 
@@ -31,6 +31,8 @@ function formatDateLabel(isoDate: string): string {
   return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
 }
 
+const RUN_DURATION = 2.8;
+
 export default function ScheduleFriendsPage() {
   const [slots, setSlots] = useState<TimeSlot[] | null>(null);
   const [loading, setLoading] = useState(true);
@@ -39,6 +41,9 @@ export default function ScheduleFriendsPage() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [submitting, setSubmitting] = useState(false);
   const [booked, setBooked] = useState<{ link?: string } | null>(null);
+  const [showFullSchedule, setShowFullSchedule] = useState(false);
+  const [gameArrived, setGameArrived] = useState(false);
+  const runStarted = useRef(false);
 
   useEffect(() => {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -56,6 +61,13 @@ export default function ScheduleFriendsPage() {
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (loading || !slots?.length || runStarted.current) return;
+    runStarted.current = true;
+    const t = setTimeout(() => setGameArrived(true), RUN_DURATION * 1000);
+    return () => clearTimeout(t);
+  }, [loading, slots?.length]);
 
   const handleBook = (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,22 +96,27 @@ export default function ScheduleFriendsPage() {
       .finally(() => setSubmitting(false));
   };
 
+  const firstSlot = slots?.[0] ?? null;
   const grouped = slots ? groupSlotsByDate(slots) : null;
+  const showGame = slots && slots.length > 0 && !showFullSchedule && !selected && !booked;
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-2xl mx-auto px-4 py-12">
+      <div className="max-w-2xl mx-auto px-4 py-8 md:py-12">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-10"
+          className="text-center mb-8"
         >
-          <h1 className="text-2xl md:text-3xl font-medium text-text-primary mb-2">
+          <h1
+            className="text-xl md:text-2xl font-medium text-text-primary mb-2"
+            style={{ fontFamily: "'Press Start 2P', monospace" }}
+          >
             Grab a slot
           </h1>
           <p className="text-text-subtle text-sm md:text-base">
-            Next 3 days, including weekends. Pick a time and you’ll get a calendar invite.
+            Next 3 days, including weekends.
           </p>
         </motion.div>
 
@@ -225,14 +242,106 @@ export default function ScheduleFriendsPage() {
                 </button>
               </div>
             </motion.form>
-          ) : grouped && grouped.size > 0 ? (
+          ) : showGame ? (
+            <motion.div
+              key="game"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="space-y-8"
+            >
+              {/* Track: walk through time */}
+              <div
+                className="relative h-24 rounded-lg bg-elevated border border-border overflow-hidden"
+                style={{ fontFamily: "'Press Start 2P', monospace" }}
+              >
+                <div className="absolute inset-0 flex items-center px-2">
+                  <div className="flex-1 h-3 rounded-full bg-border/60" />
+                </div>
+                <motion.div
+                  className="absolute bottom-4 left-4 w-10 h-10 flex items-center justify-center"
+                  initial={{ x: 0 }}
+                  animate={{ x: 240 }}
+                  transition={{
+                    duration: RUN_DURATION,
+                    ease: "linear",
+                  }}
+                >
+                  {/* Simple runner (dino-style) */}
+                  <svg
+                    width="32"
+                    height="32"
+                    viewBox="0 0 32 32"
+                    fill="none"
+                    className="scale-125"
+                  >
+                    <ellipse cx="16" cy="18" rx="8" ry="6" fill="#4A4A4F" />
+                    <circle cx="16" cy="10" r="5" fill="#4A4A4F" />
+                    <rect x="8" y="22" width="4" height="6" rx="1" fill="#4A4A4F" />
+                    <rect x="20" y="22" width="4" height="6" rx="1" fill="#4A4A4F" />
+                    <ellipse cx="22" cy="9" rx="2" ry="1.5" fill="#111" />
+                  </svg>
+                </motion.div>
+                <div className="absolute right-4 bottom-4 text-text-subtle text-[8px] md:text-[10px]">
+                  next slot →
+                </div>
+              </div>
+
+              <AnimatePresence>
+                {gameArrived && firstSlot && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="rounded-xl bg-elevated border border-border p-6 text-center space-y-4"
+                  >
+                    <p
+                      className="text-text-primary text-sm"
+                      style={{ fontFamily: "'Press Start 2P', monospace" }}
+                    >
+                      Next up
+                    </p>
+                    <p className="text-text-primary font-medium text-lg">
+                      {firstSlot.startLocal}
+                    </p>
+                    <p className="text-text-subtle text-sm">to {firstSlot.endLocal.split(", ").pop()}</p>
+                    <div className="flex flex-wrap gap-3 justify-center pt-2">
+                      <button
+                        type="button"
+                        onClick={() => setSelected(firstSlot)}
+                        className="px-4 py-2.5 rounded-lg bg-text-primary text-background text-sm font-medium hover:opacity-90 transition-opacity"
+                      >
+                        Take this slot
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setShowFullSchedule(true)}
+                        className="px-4 py-2.5 rounded-lg border border-border text-text-subtle text-sm hover:bg-elevated transition-colors"
+                      >
+                        Show all times
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          ) : showFullSchedule && grouped && grouped.size > 0 ? (
             <motion.div
               key="slots"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ staggerChildren: 0.03 }}
               className="space-y-8"
             >
+              <div className="flex justify-between items-center">
+                <p className="text-text-subtle text-sm">Pick any time</p>
+                <button
+                  type="button"
+                  onClick={() => setShowFullSchedule(false)}
+                  className="text-text-subtle text-sm hover:text-text-primary transition-colors"
+                >
+                  ← Back to game
+                </button>
+              </div>
               {Array.from(grouped.entries()).map(([dateKey, dateSlots]) => (
                 <div key={dateKey}>
                   <p className="text-text-subtle text-xs uppercase tracking-wider mb-3">

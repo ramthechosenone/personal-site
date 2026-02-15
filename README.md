@@ -134,7 +134,17 @@ The schedule page uses Google Calendar to show your availability and create even
    - `GOOGLE_SERVICE_ACCOUNT_EMAIL` – from the JSON key
    - `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY` – the `private_key` from the JSON (keep the `\n` line breaks or use real newlines)
 
-Slots are shown for the next 14 days, weekdays 9 AM–5 PM in the visitor’s timezone (or default America/Los_Angeles). When they book, an event is created on your calendar and they receive the invite.
+Slots are shown for the next 14 days, weekdays 9 AM–5 PM in the visitor’s timezone (or default America/Los_Angeles). When they book, an event is created on your calendar; they can add it via the event link (no Google invite email is sent).
+
+**Optional – get an email when someone books:** Add [Resend](https://resend.com) (free tier) and set in Vercel:
+
+- `RESEND_API_KEY` – your Resend API key  
+- `BOOKING_NOTIFY_EMAIL` – your email address (you’ll get a short “New booking” email each time)  
+- `RESEND_FROM_EMAIL` – (optional) verified sender, e.g. `bookings@yourdomain.com`; omit to use Resend’s default.
+
+### Friends schedule (`/schedule/friends`)
+
+Same calendar integration but: next 3 days only, weekends included, no nav. The page is a small “game”: a runner walks through time to the next available slot; the visitor can take that slot or open the full list of times.
 
 ## License
 

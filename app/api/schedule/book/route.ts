@@ -55,6 +55,31 @@ export async function POST(request: NextRequest) {
       description: description || undefined,
     });
 
+    // Optional: email you when someone books (set RESEND_API_KEY + BOOKING_NOTIFY_EMAIL in Vercel)
+    const notifyEmail = process.env.BOOKING_NOTIFY_EMAIL?.trim();
+    const resendKey = process.env.RESEND_API_KEY?.trim();
+    if (resendKey && notifyEmail) {
+      const startDate = new Date(start);
+      const timeStr = startDate.toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" });
+      try {
+        await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${resendKey}`,
+          },
+          body: JSON.stringify({
+            from: process.env.RESEND_FROM_EMAIL?.trim() || "onboarding@resend.dev",
+            to: [notifyEmail],
+            subject: `New booking: ${name || email} – ${timeStr}`,
+            html: `<p><strong>${name || email}</strong> booked a slot.</p><p>When: ${timeStr}</p><p>Email: ${email}</p>${description ? `<p>Message: ${description}</p>` : ""}<p><a href="${result.htmlLink || ""}">Open in Google Calendar</a></p>`,
+          }),
+        });
+      } catch {
+        // Don't fail the booking if notification fails
+      }
+    }
+
     return NextResponse.json({
       success: true,
       eventId: result.eventId,

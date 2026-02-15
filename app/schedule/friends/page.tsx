@@ -32,6 +32,8 @@ function formatDateLabel(isoDate: string): string {
 }
 
 const RUN_DURATION = 2.8;
+const SCROLL_STEP = 200;
+const SCROLL_DURATION = 1.6;
 
 export default function ScheduleFriendsPage() {
   const [slots, setSlots] = useState<TimeSlot[] | null>(null);
@@ -44,7 +46,7 @@ export default function ScheduleFriendsPage() {
   const [showFullSchedule, setShowFullSchedule] = useState(false);
   const [gameArrived, setGameArrived] = useState(false);
   const [currentSlotIndex, setCurrentSlotIndex] = useState(0);
-  const [runKey, setRunKey] = useState(0);
+  const [scrollOffset, setScrollOffset] = useState(0);
   const runStarted = useRef(false);
 
   useEffect(() => {
@@ -67,6 +69,7 @@ export default function ScheduleFriendsPage() {
   useEffect(() => {
     if (loading || !slots?.length || runStarted.current) return;
     runStarted.current = true;
+    setScrollOffset(SCROLL_STEP);
     const t = setTimeout(() => setGameArrived(true), RUN_DURATION * 1000);
     return () => clearTimeout(t);
   }, [loading, slots?.length]);
@@ -105,8 +108,11 @@ export default function ScheduleFriendsPage() {
 
   const goToNextSlot = () => {
     if (!slots || currentSlotIndex >= slots.length - 1) return;
-    setRunKey((k) => k + 1);
-    setTimeout(() => setCurrentSlotIndex((i) => Math.min(i + 1, slots.length - 1)), RUN_DURATION * 1000);
+    setScrollOffset((prev) => prev + SCROLL_STEP);
+    setTimeout(
+      () => setCurrentSlotIndex((i) => Math.min(i + 1, slots.length - 1)),
+      SCROLL_DURATION * 1000
+    );
   };
 
   return (
@@ -253,20 +259,41 @@ export default function ScheduleFriendsPage() {
               exit={{ opacity: 0 }}
               className="space-y-8"
             >
-              {/* Track: walk through time */}
-              <div className="relative h-24 rounded-lg bg-elevated border border-border overflow-hidden">
-                <div className="absolute inset-0 flex items-center px-2">
-                  <div className="flex-1 h-3 rounded-full bg-border/60" />
-                </div>
+              {/* Sky, clouds, ground — runner fixed, background scrolls */}
+              <div
+                className="relative h-28 rounded-lg border border-border overflow-hidden"
+                style={{
+                  background: "linear-gradient(180deg, #E8E9EC 0%, #E0E2E6 60%, #D8DADE 100%)",
+                }}
+              >
+                {/* Scrolling layer: ground + clouds */}
                 <motion.div
-                  key={runKey}
-                  className="absolute bottom-4 left-4 w-10 h-10 flex items-center justify-center"
-                  initial={{ x: 0 }}
-                  animate={{ x: 240 }}
+                  className="absolute inset-0"
+                  style={{ width: "400%" }}
+                  animate={{ x: -scrollOffset }}
                   transition={{
-                    duration: RUN_DURATION,
+                    duration: scrollOffset === SCROLL_STEP ? RUN_DURATION : SCROLL_DURATION,
                     ease: "linear",
                   }}
+                >
+                  {/* Ground line */}
+                  <div className="absolute bottom-8 left-0 right-0 h-0.5 bg-border/80" />
+                  {/* Clouds */}
+                  <div className="absolute top-4 left-[8%] w-12 h-5 rounded-full bg-white/50" />
+                  <div className="absolute top-6 left-[28%] w-8 h-4 rounded-full bg-white/40" />
+                  <div className="absolute top-3 left-[48%] w-14 h-6 rounded-full bg-white/50" />
+                  <div className="absolute top-5 left-[68%] w-10 h-4 rounded-full bg-white/40" />
+                  <div className="absolute top-4 left-[88%] w-11 h-5 rounded-full bg-white/50" />
+                  <div className="absolute top-6 left-[108%] w-9 h-4 rounded-full bg-white/40" />
+                  <div className="absolute top-3 left-[128%] w-12 h-5 rounded-full bg-white/50" />
+                  <div className="absolute top-5 left-[148%] w-10 h-4 rounded-full bg-white/40" />
+                </motion.div>
+
+                {/* Runner: fixed position, subtle run-in-place */}
+                <motion.div
+                  className="absolute bottom-7 left-12 w-10 h-10 flex items-center justify-center z-10"
+                  animate={{ y: [0, -2, 0] }}
+                  transition={{ duration: 0.4, repeat: Infinity, ease: "easeInOut" }}
                 >
                   <svg
                     width="32"
@@ -282,11 +309,12 @@ export default function ScheduleFriendsPage() {
                     <ellipse cx="22" cy="9" rx="2" ry="1.5" fill="#111" />
                   </svg>
                 </motion.div>
+
                 {hasNextSlot && (
                   <button
                     type="button"
                     onClick={goToNextSlot}
-                    className="absolute right-4 bottom-4 text-text-subtle text-[8px] md:text-[10px] hover:text-text-primary transition-colors"
+                    className="absolute right-4 bottom-4 text-text-subtle text-[8px] md:text-[10px] hover:text-text-primary transition-colors z-10"
                   >
                     next slot →
                   </button>

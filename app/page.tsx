@@ -26,6 +26,12 @@ export default function Home() {
           <p className="text-text-subtle">
             Software engineer · building things with minimal noise
           </p>
+          <motion.button
+            onClick={() => router.push("/schedule")}
+            className="mt-4 text-text-subtle text-sm hover:text-text-primary transition-colors underline underline-offset-2"
+          >
+            Schedule a time with me
+          </motion.button>
         </motion.div>
 
         <div className="relative flex items-center justify-center w-full max-w-2xl">

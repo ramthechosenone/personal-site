@@ -7,6 +7,7 @@ A minimal, tactile personal website inspired by an Apple keyboard aesthetic. Bui
 - **Home Page**: Interactive draggable sphere for navigation
 - **Work Page**: Grid layout showcasing work sections
 - **Personal Page**: Circular interface with expandable pill keys
+- **Schedule Page** (`/schedule`): Book a time – shows your Google Calendar availability (free/busy only) and creates events when visitors book
 - **Smooth Animations**: Framer Motion powered transitions
 - **Keyboard Navigation**: Arrow keys and Enter to navigate
 - **Responsive Design**: Works on desktop and mobile
@@ -53,6 +54,9 @@ npm start
 │   │   └── page.tsx          # Work page with grid layout
 │   ├── personal/
 │   │   └── page.tsx          # Personal page with pill keys
+│   ├── schedule/
+│   │   ├── layout.tsx        # Schedule page metadata
+│   │   └── page.tsx          # Schedule with me – book a time
 │   ├── layout.tsx            # Root layout
 │   └── globals.css           # Global styles
 ├── components/
@@ -110,6 +114,20 @@ colors: {
 - Work sections: Edit `app/work/page.tsx`
 - Personal sections: Edit `app/personal/page.tsx`
 - Home page text: Edit `app/page.tsx`
+
+### Schedule page (`/schedule`)
+
+The schedule page uses Google Calendar to show your availability and create events when someone books. No event titles or details are shown—only free and busy times.
+
+1. **Google Cloud**: Create a project, enable the [Calendar API](https://console.cloud.google.com/apis/library/calendar-json.googleapis.com), and create a **service account**. Download its JSON key.
+2. **Share your calendar**: In Google Calendar → Settings → your calendar → Share with specific people, add the service account email (e.g. `xxx@project.iam.gserviceaccount.com`) with “Make changes to events”.
+3. **Environment variables** (e.g. in `.env.local`):
+
+   - `GOOGLE_CALENDAR_ID` – your calendar id (usually your Gmail address for the primary calendar)
+   - `GOOGLE_SERVICE_ACCOUNT_EMAIL` – from the JSON key
+   - `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY` – the `private_key` from the JSON (keep the `\n` line breaks or use real newlines)
+
+Slots are shown for the next 14 days, weekdays 9 AM–5 PM in the visitor’s timezone (or default America/Los_Angeles). When they book, an event is created on your calendar and they receive the invite.
 
 ## License
 

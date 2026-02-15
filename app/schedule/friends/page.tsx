@@ -48,6 +48,7 @@ export default function ScheduleFriendsPage() {
   const [gameArrived, setGameArrived] = useState(false);
   const [currentSlotIndex, setCurrentSlotIndex] = useState(0);
   const [scrollOffset, setScrollOffset] = useState(0);
+  const [advancingToNextSlot, setAdvancingToNextSlot] = useState(false);
   const runStarted = useRef(false);
 
   useEffect(() => {
@@ -109,11 +110,12 @@ export default function ScheduleFriendsPage() {
 
   const goToNextSlot = () => {
     if (!slots || currentSlotIndex >= slots.length - 1) return;
+    setAdvancingToNextSlot(true);
     setScrollOffset((prev) => prev + SCROLL_STEP);
-    setTimeout(
-      () => setCurrentSlotIndex((i) => Math.min(i + 1, slots.length - 1)),
-      SCROLL_DURATION * 1000
-    );
+    setTimeout(() => {
+      setCurrentSlotIndex((i) => Math.min(i + 1, slots.length - 1));
+      setAdvancingToNextSlot(false);
+    }, SCROLL_DURATION * 1000);
   };
 
   return (
@@ -125,7 +127,10 @@ export default function ScheduleFriendsPage() {
           transition={{ duration: 0.5 }}
           className="text-center mb-8"
         >
-          <h1 className="text-xl md:text-2xl font-medium text-text-primary">
+          <h1
+            className="text-xl md:text-2xl font-medium text-text-primary"
+            style={{ fontFamily: "'Press Start 2P', monospace" }}
+          >
             Grab a slot
           </h1>
         </motion.div>
@@ -311,8 +316,19 @@ export default function ScheduleFriendsPage() {
                 )}
               </div>
 
-              <AnimatePresence>
-                {gameArrived && displayedSlot && (
+              <AnimatePresence mode="wait">
+                {gameArrived && advancingToNextSlot && (
+                  <motion.div
+                    key="loading"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="rounded-xl bg-elevated border border-border p-6 flex items-center justify-center min-h-[200px]"
+                  >
+                    <LoadingDuck />
+                  </motion.div>
+                )}
+                {gameArrived && !advancingToNextSlot && displayedSlot && (
                   <motion.div
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}

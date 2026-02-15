@@ -154,20 +154,7 @@ export default function ScheduleFriendsPage() {
               exit={{ opacity: 0 }}
               className="rounded-xl bg-elevated border border-border shadow-[0_2px_8px_rgba(0,0,0,0.06)] p-8 text-center"
             >
-              <p className="text-text-primary font-medium mb-2">You’re all set</p>
-              <p className="text-text-subtle text-sm mb-4">
-                The event is booked. Use the link below to add it to your calendar (you won’t get an email from Google).
-              </p>
-              {booked.link && (
-                <a
-                  href={booked.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-accent text-sm hover:underline"
-                >
-                  Open in Google Calendar
-                </a>
-              )}
+              <p className="text-text-primary font-medium">Booked.</p>
               <button
                 type="button"
                 onClick={() => setBooked(null)}

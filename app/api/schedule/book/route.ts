@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       const startDate = new Date(start);
       const timeStr = startDate.toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" });
       try {
-        await fetch("https://api.resend.com/emails", {
+        const res = await fetch("https://api.resend.com/emails", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -75,8 +75,12 @@ export async function POST(request: NextRequest) {
             html: `<p><strong>${name}</strong> booked a slot.</p><p>When: ${timeStr}</p>${email ? `<p>Email: ${email}</p>` : ""}${description ? `<p>Message: ${description}</p>` : ""}<p><a href="${result.htmlLink || ""}">Open in Google Calendar</a></p>`,
           }),
         });
-      } catch {
-        // Don't fail the booking if notification fails
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          console.error("[schedule/book] Resend failed:", res.status, err);
+        }
+      } catch (e) {
+        console.error("[schedule/book] Resend error:", e);
       }
     }
 

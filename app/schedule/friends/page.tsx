@@ -135,16 +135,6 @@ export default function ScheduleFriendsPage() {
           </h1>
         </motion.div>
 
-        {loading && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="rounded-xl bg-elevated border border-border p-6 flex items-center justify-center min-h-[200px]"
-          >
-            <LoadingDuck />
-          </motion.div>
-        )}
-
         {error && !loading && (
           <motion.div
             initial={{ opacity: 0, y: 8 }}
@@ -254,7 +244,7 @@ export default function ScheduleFriendsPage() {
                 </button>
               </div>
             </motion.form>
-          ) : showGame ? (
+          ) : showGame || loading ? (
             <motion.div
               key="game"
               initial={{ opacity: 0 }}
@@ -262,7 +252,7 @@ export default function ScheduleFriendsPage() {
               exit={{ opacity: 0 }}
               className="space-y-8"
             >
-              {/* Sky, clouds, ground — runner fixed, background scrolls */}
+              {/* Sky, clouds, ground — show when loading (static) or when game (scrolls) */}
               <div
                 className="relative h-28 rounded-lg border border-border overflow-hidden"
                 style={{
@@ -313,7 +303,7 @@ export default function ScheduleFriendsPage() {
                   </svg>
                 </motion.div>
 
-                {hasNextSlot && (
+                {!loading && hasNextSlot && (
                   <button
                     type="button"
                     onClick={goToNextSlot}
@@ -324,8 +314,9 @@ export default function ScheduleFriendsPage() {
                 )}
               </div>
 
+              {/* Card slot: duck when loading, advancing, or initial scroll; "Next up" when ready */}
               <AnimatePresence mode="wait">
-                {gameArrived && advancingToNextSlot && (
+                {(loading || advancingToNextSlot || (showGame && !gameArrived)) && (
                   <motion.div
                     key="loading"
                     initial={{ opacity: 0 }}
@@ -336,7 +327,7 @@ export default function ScheduleFriendsPage() {
                     <LoadingDuck />
                   </motion.div>
                 )}
-                {gameArrived && !advancingToNextSlot && displayedSlot && (
+                {!loading && gameArrived && !advancingToNextSlot && displayedSlot && (
                   <motion.div
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import SiteShell from "@/components/layout/SiteShell";
 import BackButton from "@/components/layout/BackButton";
 import KeyCard from "@/components/common/KeyCard";
+import LoadingDuck from "@/components/common/LoadingDuck";
 
 interface TimeSlot {
   start: string;
@@ -104,18 +105,7 @@ export default function SchedulePage() {
           </p>
         </motion.div>
 
-        {loading && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex justify-center py-16"
-          >
-            <div
-              className="w-10 h-10 rounded-full border-2 border-border border-t-text-subtle animate-spin"
-              aria-hidden
-            />
-          </motion.div>
-        )}
+        {loading && <LoadingDuck />}
 
         {error && !loading && (
           <motion.div
@@ -173,27 +163,27 @@ export default function SchedulePage() {
                 <p className="text-text-subtle text-sm">{selected.endLocal}</p>
               </div>
               <div>
-                <label htmlFor="schedule-email" className="block text-text-subtle text-sm mb-1">
-                  Email *
-                </label>
-                <input
-                  id="schedule-email"
-                  type="email"
-                  required
-                  value={form.email}
-                  onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                  className="w-full bg-background border border-border rounded-lg px-3 py-2 text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-border"
-                />
-              </div>
-              <div>
                 <label htmlFor="schedule-name" className="block text-text-subtle text-sm mb-1">
-                  Name
+                  Name *
                 </label>
                 <input
                   id="schedule-name"
                   type="text"
+                  required
                   value={form.name}
                   onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                  className="w-full bg-background border border-border rounded-lg px-3 py-2 text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-border"
+                />
+              </div>
+              <div>
+                <label htmlFor="schedule-email" className="block text-text-subtle text-sm mb-1">
+                  Email (optional)
+                </label>
+                <input
+                  id="schedule-email"
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                   className="w-full bg-background border border-border rounded-lg px-3 py-2 text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-border"
                 />
               </div>

@@ -139,27 +139,25 @@ export async function getAvailableSlots(
 }
 
 export interface CreateEventInput {
-  start: string; // ISO
+  start: string;
   end: string;
-  attendeeEmail: string;
-  attendeeName?: string;
+  attendeeName: string;
+  attendeeEmail?: string;
   summary?: string;
   description?: string;
 }
 
 /**
- * Create a calendar event and optionally add the guest (sends invite).
+ * Create a calendar event. Guest info (name, optional email) is stored in the description.
  */
 export async function createCalendarEvent(input: CreateEventInput): Promise<{ eventId: string; htmlLink: string | null }> {
   const { calendar, calendarId } = getCalendarClient();
 
-  const summary = input.summary ?? `Meeting with ${input.attendeeName || input.attendeeEmail}`;
-  const description = [
-    input.description,
-    input.attendeeName ? `Guest: ${input.attendeeName} (${input.attendeeEmail})` : `Guest: ${input.attendeeEmail}`,
-  ]
-    .filter(Boolean)
-    .join("\n\n");
+  const summary = input.summary ?? `Meeting with ${input.attendeeName}`;
+  const guestLine = input.attendeeEmail
+    ? `Guest: ${input.attendeeName} (${input.attendeeEmail})`
+    : `Guest: ${input.attendeeName}`;
+  const description = [input.description, guestLine].filter(Boolean).join("\n\n");
 
   // Don't add attendees to the event body — service accounts can't invite without domain-wide delegation.
   // Guest info is in the description so you know who booked; they use the event link to add to their calendar.

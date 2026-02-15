@@ -20,15 +20,12 @@ export default function Home() {
           transition={{ duration: 0.6 }}
           className="text-center mb-8"
         >
-          <h1 className="text-3xl font-medium text-text-primary mb-2">
+          <h1 className="text-3xl font-medium text-text-primary mb-4">
             Sriram Devarapu
           </h1>
-          <p className="text-text-subtle">
-            Software engineer · building things with minimal noise
-          </p>
           <motion.button
             onClick={() => router.push("/schedule")}
-            className="mt-4 text-text-subtle text-sm hover:text-text-primary transition-colors underline underline-offset-2"
+            className="text-text-subtle text-sm hover:text-text-primary transition-colors underline underline-offset-2"
           >
             Schedule a time with me
           </motion.button>

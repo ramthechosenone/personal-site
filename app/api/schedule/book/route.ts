@@ -39,9 +39,9 @@ export async function POST(request: NextRequest) {
       description?: string;
     };
 
-    if (!start || !end || !email) {
+    if (!start || !end || !name) {
       return NextResponse.json(
-        { error: "Missing required fields: start, end, email" },
+        { error: "Missing required fields: start, end, name" },
         { status: 400 }
       );
     }
@@ -49,8 +49,8 @@ export async function POST(request: NextRequest) {
     const result = await createCalendarEvent({
       start,
       end,
-      attendeeEmail: email,
-      attendeeName: name || undefined,
+      attendeeName: name,
+      attendeeEmail: email || undefined,
       summary: summary || undefined,
       description: description || undefined,
     });
@@ -71,8 +71,8 @@ export async function POST(request: NextRequest) {
           body: JSON.stringify({
             from: process.env.RESEND_FROM_EMAIL?.trim() || "onboarding@resend.dev",
             to: [notifyEmail],
-            subject: `New booking: ${name || email} – ${timeStr}`,
-            html: `<p><strong>${name || email}</strong> booked a slot.</p><p>When: ${timeStr}</p><p>Email: ${email}</p>${description ? `<p>Message: ${description}</p>` : ""}<p><a href="${result.htmlLink || ""}">Open in Google Calendar</a></p>`,
+            subject: `New booking: ${name} – ${timeStr}`,
+            html: `<p><strong>${name}</strong> booked a slot.</p><p>When: ${timeStr}</p>${email ? `<p>Email: ${email}</p>` : ""}${description ? `<p>Message: ${description}</p>` : ""}<p><a href="${result.htmlLink || ""}">Open in Google Calendar</a></p>`,
           }),
         });
       } catch {

@@ -1,0 +1,45 @@
+/* FPL Predictor — Scoped retro football programme styles */
+
+.fpl-double-rule {
+  border: none;
+  border-top: 3px double #8B3A3A;
+  margin: 1.5rem 0;
+}
+
+.fpl-position-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.fpl-position-gk {
+  background-color: #A7C4A0;
+  color: #2C3E2D;
+}
+
+.fpl-position-def {
+  background-color: #94A3B8;
+  color: #1E293B;
+}
+
+.fpl-position-mid {
+  background-color: #F6D860;
+  color: #5C4A00;
+}
+
+.fpl-position-fwd {
+  background-color: #E8A0A0;
+  color: #5C1A1A;
+}
+
+.fpl-table-header {
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #7A6E5D;
+}

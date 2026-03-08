@@ -1,3 +1,5 @@
+import fs from "fs";
+import path from "path";
 import BlogContent from "@/components/fpl/BlogContent";
 
 export const metadata = {
@@ -6,21 +8,14 @@ export const metadata = {
     "A running log of decisions, discoveries, and learnings building an FPL points predictor from scratch.",
 };
 
-const BLOG_URL =
-  "https://raw.githubusercontent.com/ramthechosenone/FPLPredictor/main/BLOG_JOURNAL.md";
-
-async function getBlogContent(): Promise<string> {
+export default function BlogPage() {
+  const blogPath = path.join(process.cwd(), "app", "fpl", "blog", "BLOG_JOURNAL.md");
+  let content = "";
   try {
-    const res = await fetch(BLOG_URL, { next: { revalidate: 3600 } });
-    if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`);
-    return res.text();
+    content = fs.readFileSync(blogPath, "utf-8");
   } catch {
-    return "# Blog Journal\n\nBlog content is temporarily unavailable.";
+    content = "# Blog Journal\n\nBlog content not found.";
   }
-}
-
-export default async function BlogPage() {
-  const content = await getBlogContent();
 
   return (
     <div className="max-w-3xl mx-auto px-4">

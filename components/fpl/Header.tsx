@@ -8,6 +8,14 @@ export default function Header() {
         Machine Learning Predictions for Fantasy Premier League
       </p>
       <hr className="fpl-double-rule max-w-md mx-auto" />
+      <nav className="mt-2">
+        <a
+          href="/fpl/blog"
+          className="text-sm font-[family-name:var(--font-lora)] text-[#7A6E5D] hover:text-[#8B3A3A] transition-colors underline decoration-[#C4B99A] hover:decoration-[#8B3A3A]"
+        >
+          Read the Build Journal &rarr;
+        </a>
+      </nav>
     </header>
   );
 }

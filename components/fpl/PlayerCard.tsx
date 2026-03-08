@@ -14,6 +14,15 @@ export default function PlayerCard({ player, index }: PlayerCardProps) {
         {index + 1}
       </div>
 
+      {/* Player Photo */}
+      <img
+        src={player.photo_url}
+        alt={player.name}
+        className="w-10 h-12 rounded object-cover shrink-0 bg-[#C4B99A]"
+        loading="lazy"
+        onError={(e) => { e.currentTarget.style.display = "none"; }}
+      />
+
       {/* Player Info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">

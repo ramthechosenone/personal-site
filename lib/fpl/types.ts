@@ -6,6 +6,7 @@ export interface Player {
   team: string;
   price: number;
   predicted_points: number;
+  photo_url: string;
 }
 
 export interface PredictionsResponse {

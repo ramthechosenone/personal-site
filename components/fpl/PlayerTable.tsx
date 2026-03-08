@@ -31,7 +31,16 @@ export default function PlayerTable({ players }: PlayerTableProps) {
                 {i + 1}
               </td>
               <td className="py-2.5 px-3 font-[family-name:var(--font-playfair)] font-semibold">
-                {player.name}
+                <div className="flex items-center gap-2">
+                  <img
+                    src={player.photo_url}
+                    alt={player.name}
+                    className="w-8 h-10 rounded object-cover bg-[#C4B99A]"
+                    loading="lazy"
+                    onError={(e) => { e.currentTarget.style.display = "none"; }}
+                  />
+                  {player.name}
+                </div>
               </td>
               <td className="py-2.5 px-3">
                 <span

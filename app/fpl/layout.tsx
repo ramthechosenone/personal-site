@@ -31,6 +31,7 @@ export default function FPLLayout({
         backgroundColor: "#F5F0E1",
         color: "#2C2416",
         fontFamily: "var(--font-lora), Georgia, serif",
+        overflowX: "hidden",
       }}
     >
       {children}

@@ -5,9 +5,10 @@ import KeyCard from "@/components/common/KeyCard";
 
 interface BackButtonProps {
   circular?: boolean;
+  to?: string;
 }
 
-export default function BackButton({ circular = false }: BackButtonProps) {
+export default function BackButton({ circular = false, to }: BackButtonProps) {
   const router = useRouter();
 
   const shapeClass = circular ? "rounded-full" : "rounded-lg";
@@ -16,7 +17,7 @@ export default function BackButton({ circular = false }: BackButtonProps) {
   return (
     <nav className="flex gap-2 p-4 justify-center">
       <KeyCard
-        onClick={() => router.push("/")}
+        onClick={() => router.push(to ?? "/")}
         className={`${sizeClass} text-sm ${shapeClass}`}
       >
         ←

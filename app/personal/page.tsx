@@ -1,36 +1,43 @@
 "use client";
 
+import { ReactNode } from "react";
 import { motion } from "framer-motion";
 import SiteShell from "@/components/layout/SiteShell";
 import BackButton from "@/components/layout/BackButton";
 import PillKey from "@/components/common/PillKey";
 
-const personalSections = [
-  {
-    label: "Writing & Reflections",
-    content: "TODO: Add writing and reflections",
-  },
-  {
-    label: "Photography",
-    content: "TODO: Add photography",
-  },
-  {
-    label: "Play & Movement",
-    content: "TODO: Add play and movement content",
-  },
-  {
-    label: "Now",
-    content: "TODO: Add current focus and activities",
-  },
-  {
-    label: "Awareness & Frameworks",
-    content: "TODO: Add awareness and frameworks",
-  },
-];
+type PersonalSection = {
+  label: string;
+  content?: ReactNode;
+  onClick?: () => void;
+};
 
-const showContent = process.env.NEXT_PUBLIC_SHOW_WORK_AND_PERSONAL === "true";
+function getPersonalSections(): PersonalSection[] {
+  return [
+    {
+      label: "Writing & Reflections",
+      content: "TODO: Add writing and reflections",
+    },
+    {
+      label: "Play & Movement",
+      content: "TODO: Add play and movement content",
+    },
+    {
+      label: "Now",
+      content: "TODO: Add current focus and activities",
+    },
+    {
+      label: "Awareness & Frameworks",
+      content: "TODO: Add awareness and frameworks",
+    },
+  ];
+}
+
+const showContent = process.env.NEXT_PUBLIC_SHOW_WORK_AND_PERSONAL !== "false";
 
 export default function Personal() {
+  const personalSections = getPersonalSections();
+
   if (!showContent) {
     return (
       <SiteShell>
@@ -78,7 +85,7 @@ export default function Personal() {
           className="space-y-4"
         >
           {personalSections.map((section, index) => (
-            <PillKey key={index} label={section.label}>
+            <PillKey key={index} label={section.label} onClick={section.onClick}>
               {section.content}
             </PillKey>
           ))}
@@ -87,4 +94,3 @@ export default function Personal() {
     </SiteShell>
   );
 }
-

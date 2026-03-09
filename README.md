@@ -113,8 +113,7 @@ colors: {
 
 The home page always shows the sphere and the Personal/Work buttons (and their behavior). The **content** of the Work and Personal pages is hidden until you turn it on:
 
-- **`NEXT_PUBLIC_SHOW_WORK_AND_PERSONAL`** = `true` — `/work` and `/personal` show their full content (case studies, pill keys, etc.). Set this in Vercel (or `.env.local`) when you’re ready to publish.
-- Leave unset or set to anything else — Visiting `/work` or `/personal` shows a simple “In the works — check back soon.” with a back button. The sphere and labels on the home page still work and navigate to these placeholder pages.
+- **`NEXT_PUBLIC_SHOW_WORK_AND_PERSONAL`** — `/work` and `/personal` show their full content by default. Set this to `"false"` in Vercel (or `.env.local`) if you want to hide them and show “In the works — check back soon.” instead.
 
 ### Content
 
@@ -144,7 +143,7 @@ Slots are shown for the next 14 days, weekdays 9 AM–5 PM in the visitor’s ti
 
 ### Friends schedule (`/schedule/friends`)
 
-Same calendar integration but: next 3 days only, weekends included, no nav. The page is a small “game”: a runner walks through time to the next available slot; the visitor can take that slot or open the full list of times.
+Same calendar integration but: next 3 days only, weekends included, no nav. The page is a small "game": a runner walks through time to the next available slot; the visitor can take that slot or open the full list of times.
 
 ## License
 

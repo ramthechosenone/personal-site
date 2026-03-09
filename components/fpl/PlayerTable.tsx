@@ -3,9 +3,10 @@ import { POSITION_COLORS } from "@/lib/fpl/constants";
 
 interface PlayerTableProps {
   players: Player[];
+  onPlayerClick: (player: Player) => void;
 }
 
-export default function PlayerTable({ players }: PlayerTableProps) {
+export default function PlayerTable({ players, onPlayerClick }: PlayerTableProps) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse">
@@ -16,14 +17,15 @@ export default function PlayerTable({ players }: PlayerTableProps) {
             <th className="fpl-table-header text-left py-3 px-3">Position</th>
             <th className="fpl-table-header text-left py-3 px-3">Team</th>
             <th className="fpl-table-header text-right py-3 px-3">Price</th>
-            <th className="fpl-table-header text-right py-3 px-3">Predicted Pts</th>
+            <th className="fpl-table-header text-right py-3 px-3">Score</th>
           </tr>
         </thead>
         <tbody>
           {players.map((player, i) => (
             <tr
               key={player.player_id}
-              className={`border-b border-[#C4B99A] hover:bg-[#EDE6D0] transition-colors ${
+              onClick={() => onPlayerClick(player)}
+              className={`border-b border-[#C4B99A] hover:bg-[#EDE6D0] transition-colors cursor-pointer ${
                 i % 2 === 0 ? "" : "bg-[#EDE6D0]/50"
               }`}
             >
@@ -56,7 +58,7 @@ export default function PlayerTable({ players }: PlayerTableProps) {
                 £{player.price.toFixed(1)}m
               </td>
               <td className="py-2.5 px-3 text-right font-bold text-[#2D6A4F] text-lg font-[family-name:var(--font-playfair)]">
-                {player.predicted_points.toFixed(1)}
+                {player.score.toFixed(1)}
               </td>
             </tr>
           ))}

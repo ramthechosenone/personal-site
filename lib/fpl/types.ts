@@ -5,7 +5,8 @@ export interface Player {
   position: "GK" | "DEF" | "MID" | "FWD";
   team: string;
   price: number;
-  predicted_points: number;
+  score: number;
+  reason: string;
   photo_url: string;
 }
 

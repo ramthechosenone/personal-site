@@ -4,11 +4,15 @@ import { POSITION_COLORS } from "@/lib/fpl/constants";
 interface PlayerCardProps {
   player: Player;
   index: number;
+  onPlayerClick: (player: Player) => void;
 }
 
-export default function PlayerCard({ player, index }: PlayerCardProps) {
+export default function PlayerCard({ player, index, onPlayerClick }: PlayerCardProps) {
   return (
-    <div className="bg-[#EDE6D0] border border-[#C4B99A] rounded p-4 flex items-center gap-4">
+    <div
+      onClick={() => onPlayerClick(player)}
+      className="bg-[#EDE6D0] border border-[#C4B99A] rounded p-4 flex items-center gap-4 cursor-pointer hover:bg-[#E5DCC8] transition-colors"
+    >
       {/* Rank */}
       <div className="text-2xl font-bold text-[#7A6E5D] font-[family-name:var(--font-playfair)] w-8 text-center shrink-0">
         {index + 1}
@@ -38,13 +42,13 @@ export default function PlayerCard({ player, index }: PlayerCardProps) {
         </div>
       </div>
 
-      {/* Predicted Points */}
+      {/* Score */}
       <div className="text-right shrink-0">
         <div className="text-2xl font-bold text-[#2D6A4F] font-[family-name:var(--font-playfair)]">
-          {player.predicted_points.toFixed(1)}
+          {player.score.toFixed(1)}
         </div>
         <div className="text-xs text-[#7A6E5D] uppercase tracking-wider">
-          pts
+          score
         </div>
       </div>
     </div>

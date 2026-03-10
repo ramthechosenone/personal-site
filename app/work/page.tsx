@@ -6,27 +6,8 @@ import SiteShell from "@/components/layout/SiteShell";
 import BackButton from "@/components/layout/BackButton";
 import PillKey from "@/components/common/PillKey";
 
-const showContent = process.env.NEXT_PUBLIC_SHOW_WORK_AND_PERSONAL !== "false";
-
 export default function Work() {
   const router = useRouter();
-
-  if (!showContent) {
-    return (
-      <SiteShell>
-        <BackButton />
-        <div className="min-h-screen flex flex-col items-center justify-center px-4">
-          <motion.p
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-text-subtle text-center"
-          >
-            In the works — check back soon.
-          </motion.p>
-        </div>
-      </SiteShell>
-    );
-  }
 
   return (
     <SiteShell>

@@ -7,9 +7,11 @@ interface PillKeyProps {
   label: string;
   children?: ReactNode;
   onClick?: () => void;
+  illustration?: ReactNode;
+  variant?: "pill" | "box";
 }
 
-export default function PillKey({ label, children, onClick }: PillKeyProps) {
+export default function PillKey({ label, children, onClick, illustration, variant = "pill" }: PillKeyProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleClick = () => {
@@ -24,12 +26,14 @@ export default function PillKey({ label, children, onClick }: PillKeyProps) {
     <div className="w-full">
       <motion.button
         onClick={handleClick}
-        className="
-          w-full bg-elevated border border-border rounded-full
-          px-6 py-3 text-left
+        className={`
+          w-full bg-elevated border border-border
+          ${variant === "pill" ? "rounded-full" : "rounded-none"}
+          px-6 py-3 text-left relative overflow-hidden
           shadow-[0_1px_3px_rgba(0,0,0,0.08)]
           cursor-pointer select-none
-        "
+          ${illustration ? "pr-20" : ""}
+        `}
         whileHover={{
           y: -2,
           boxShadow: "0 4px 8px rgba(0,0,0,0.12)",
@@ -41,6 +45,11 @@ export default function PillKey({ label, children, onClick }: PillKeyProps) {
         }}
       >
         <span className="text-text-primary font-medium">{label}</span>
+        {illustration && (
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+            {illustration}
+          </span>
+        )}
       </motion.button>
       {children && (
         <AnimatePresence>

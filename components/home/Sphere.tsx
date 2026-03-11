@@ -78,10 +78,19 @@ export default function Sphere({ onNavigateLeft, onNavigateRight, onHighlightCha
       }}
       animate={{
         borderRadius: isWorkHovered ? "12px" : "50%",
+        boxShadow: [
+          "0 4px 12px rgba(0,0,0,0.12)",
+          "0 6px 20px rgba(0,0,0,0.18)",
+          "0 4px 12px rgba(0,0,0,0.12)",
+        ],
       }}
       transition={{
-        duration: 0.3,
-        ease: "easeInOut",
+        borderRadius: { duration: 0.3, ease: "easeInOut" },
+        boxShadow: {
+          duration: 4,
+          ease: "easeInOut",
+          repeat: Infinity,
+        },
       }}
       className="
         shadow-[0_4px_12px_rgba(0,0,0,0.15)]

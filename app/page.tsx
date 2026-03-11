@@ -63,6 +63,16 @@ export default function Home() {
             isWorkHovered={isWorkHovered}
           />
 
+          {/* Drag hint */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 1, 1, 0] }}
+            transition={{ duration: 4, delay: 1.5, times: [0, 0.1, 0.7, 1] }}
+            className="absolute -bottom-8 text-text-subtle text-xs pointer-events-none"
+          >
+            drag or tap to explore
+          </motion.p>
+
           {/* Right hint */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}

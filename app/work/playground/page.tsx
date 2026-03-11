@@ -7,20 +7,61 @@ import BackButton from "@/components/layout/BackButton";
 
 type Project = {
   title: string;
+  tech: string;
   description: string;
-  links: { label: string; href: string }[];
+  links: { label: string; href: string; external?: boolean }[];
 };
 
 const projects: Project[] = [
   {
     title: "FPL Predictor",
+    tech: "Python, XGBoost, Random Forest, Pandas, Next.js, Google Cloud Run",
     description:
-      "A Fantasy Premier League player prediction app powered by ML models (Random Forest, XGBoost). Consumes FPL APIs, cleans historical datasets, engineers custom features, and ranks players to automate team selection. Deployed on Google Cloud Run with a Next.js frontend.",
+      "A Fantasy Premier League player prediction app powered by ML models. Consumes FPL APIs and FBref data, cleans historical datasets, engineers custom features, and ranks players to automate team selection. Deployed on Google Cloud Run with a Next.js frontend.",
     links: [
       { label: "Open App", href: "/fpl" },
       { label: "Build Journal", href: "/fpl/blog" },
+      {
+        label: "GitHub",
+        href: "https://github.com/ramthechosenone",
+        external: true,
+      },
     ],
   },
+  {
+    title: "Churn Prediction Microservice",
+    tech: "Python, Flask, Scikit-learn, REST API",
+    description:
+      "A full-lifecycle machine learning pipeline to predict member retention for associations. Performs feature engineering and hyperparameter tuning, operationalized as a Flask REST API enabling real-time consumption by internal dashboards.",
+    links: [],
+  },
+  {
+    title: "Personal Website",
+    tech: "Next.js, React, TypeScript, Tailwind CSS, Framer Motion, Vercel",
+    description:
+      "This site — a portfolio and personal space built with Next.js and deployed on Vercel. Features pixel-art animations, a real-time clock, photography gallery backed by Cloudflare R2, and the FPL Predictor integration.",
+    links: [
+      {
+        label: "GitHub",
+        href: "https://github.com/ramthechosenone/personal-site",
+        external: true,
+      },
+    ],
+  },
+  {
+    title: "AI Assistant (OpenClaw)",
+    tech: "Claude Code, Obsidian, Telegram, Python",
+    description:
+      "A smart AI assistant integrating Claude Code with Obsidian for knowledge management and Telegram for conversational access. Exploring agentic workflows, tool use, and personal productivity automation.",
+    links: [],
+  },
+];
+
+const exploring = [
+  "Building with Claude Code and agentic AI workflows",
+  "Obsidian as a knowledge graph with AI integration",
+  "ML pipelines — from feature engineering to cloud deployment",
+  "Next.js / React for interactive portfolio and data apps",
 ];
 
 const stagger = {
@@ -64,30 +105,66 @@ export default function Playground() {
               variants={fadeUp}
               className="border border-border bg-elevated p-6"
             >
-              <h2 className="text-lg font-medium text-text-primary mb-2">
+              <h2 className="text-lg font-medium text-text-primary mb-1">
                 {project.title}
               </h2>
+              <p className="text-text-subtle text-xs mb-3">{project.tech}</p>
               <p className="text-text-subtle text-sm leading-relaxed mb-4">
                 {project.description}
               </p>
-              <div className="flex gap-3">
-                {project.links.map((link) => (
-                  <button
-                    key={link.href}
-                    onClick={() => router.push(link.href)}
-                    className="
-                      px-4 py-2 text-sm font-medium
-                      text-text-primary bg-surface border border-border
-                      cursor-pointer select-none
-                      hover:bg-border transition-colors
-                    "
-                  >
-                    {link.label}
-                  </button>
-                ))}
-              </div>
+              {project.links.length > 0 && (
+                <div className="flex flex-wrap gap-3">
+                  {project.links.map((link) =>
+                    link.external ? (
+                      <a
+                        key={link.href}
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="
+                          px-4 py-2 text-sm font-medium
+                          text-text-primary bg-surface border border-border
+                          hover:bg-border transition-colors
+                        "
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <button
+                        key={link.href}
+                        onClick={() => router.push(link.href)}
+                        className="
+                          px-4 py-2 text-sm font-medium
+                          text-text-primary bg-surface border border-border
+                          cursor-pointer select-none
+                          hover:bg-border transition-colors
+                        "
+                      >
+                        {link.label}
+                      </button>
+                    )
+                  )}
+                </div>
+              )}
             </motion.div>
           ))}
+
+          {/* Currently Exploring */}
+          <motion.div variants={fadeUp} className="mt-8">
+            <h2 className="text-lg font-medium text-text-primary mb-4">
+              Currently Exploring
+            </h2>
+            <ul className="space-y-2">
+              {exploring.map((item, i) => (
+                <li
+                  key={i}
+                  className="text-text-subtle text-sm leading-relaxed pl-4 border-l-2 border-border"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
         </motion.div>
       </div>
     </SiteShell>

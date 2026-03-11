@@ -54,7 +54,7 @@ export default function BlogPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
-      <BackButton to="/fpl" />
+      <BackButton to="/work/playground" />
       <header className="text-center mb-8">
         <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">
           Build Journal

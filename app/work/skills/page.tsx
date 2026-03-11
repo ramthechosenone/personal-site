@@ -16,19 +16,50 @@ const categories = [
       "REST APIs",
       "Entity Framework",
       "Node.js",
+      "Flask",
     ],
   },
   {
     label: "Cloud & DevOps",
-    items: ["Azure Functions", "Azure DevOps", "Docker", "CI/CD Pipelines"],
+    items: [
+      "Azure Functions",
+      "Azure DevOps",
+      "Google Cloud Run",
+      "Docker",
+      "CI/CD Pipelines",
+    ],
   },
   {
     label: "Data & ML",
-    items: ["SQL Server", "Pandas", "NumPy", "Scikit-learn", "Flask"],
+    items: [
+      "SQL Server",
+      "Pandas",
+      "NumPy",
+      "Scikit-learn",
+      "XGBoost",
+      "Matplotlib",
+    ],
   },
   {
     label: "Frontend",
-    items: ["React", "Next.js", "Angular", "Tailwind CSS", "Bootstrap"],
+    items: [
+      "React",
+      "Next.js",
+      "Angular",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Bootstrap",
+    ],
+  },
+  {
+    label: "Tools & Workflow",
+    items: [
+      "Git",
+      "Claude Code",
+      "Obsidian",
+      "Vercel",
+      "Cloudflare R2",
+    ],
   },
 ];
 

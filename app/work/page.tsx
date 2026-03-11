@@ -29,12 +29,55 @@ export default function Work() {
             variant="box"
             onClick={() => router.push("/work/skills")}
           />
-          <PillKey label="Case Studies" variant="box" />
+          <PillKey
+            label="Case Studies"
+            variant="box"
+            onClick={() => router.push("/work/case-studies")}
+          />
           <PillKey
             label="Playground / Experiments"
             variant="box"
             onClick={() => router.push("/work/playground")}
           />
+        </motion.div>
+
+        {/* Contact & Links */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="mt-12 flex flex-wrap items-center justify-center gap-4 text-sm"
+        >
+          <a
+            href="/SriramPDevarapu.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-4 py-2 border border-border bg-elevated text-text-primary font-medium hover:bg-border transition-colors"
+          >
+            Resume (PDF)
+          </a>
+          <a
+            href="mailto:srirampdevarapu@gmail.com"
+            className="px-4 py-2 border border-border bg-elevated text-text-subtle hover:bg-border transition-colors"
+          >
+            srirampdevarapu@gmail.com
+          </a>
+          <a
+            href="https://www.linkedin.com/in/sriramdevarapu/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-4 py-2 border border-border bg-elevated text-text-subtle hover:bg-border transition-colors"
+          >
+            LinkedIn
+          </a>
+          <a
+            href="https://github.com/ramthechosenone"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-4 py-2 border border-border bg-elevated text-text-subtle hover:bg-border transition-colors"
+          >
+            GitHub
+          </a>
         </motion.div>
       </div>
     </SiteShell>

@@ -31,19 +31,19 @@ export default function Home() {
           </motion.button>
         </motion.div>
 
-        <div className="relative flex items-center justify-center w-full max-w-2xl">
+        <div className="relative flex items-center justify-center gap-6 md:gap-10">
           {/* Left hint */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="absolute left-0 md:left-8 top-1/2 -translate-y-1/2 z-10"
+            className="z-10 shrink-0"
           >
             <motion.button
               onClick={() => router.push("/personal")}
               onMouseEnter={() => setIsWorkHovered(false)}
               onMouseLeave={() => setIsWorkHovered(false)}
-              className={`text-sm md:text-base transition-colors relative z-10 ${
+              className={`text-sm md:text-base transition-colors ${
                 highlightedSide === "left"
                   ? "text-text-primary font-medium"
                   : "text-text-subtle hover:text-text-primary"
@@ -55,36 +55,38 @@ export default function Home() {
             </motion.button>
           </motion.div>
 
-          {/* Sphere */}
-          <Sphere
-            onNavigateLeft={() => router.push("/personal")}
-            onNavigateRight={() => router.push("/work")}
-            onHighlightChange={setHighlightedSide}
-            isWorkHovered={isWorkHovered}
-          />
+          {/* Sphere wrapper for relative positioning of drag hint */}
+          <div className="relative shrink-0">
+            <Sphere
+              onNavigateLeft={() => router.push("/personal")}
+              onNavigateRight={() => router.push("/work")}
+              onHighlightChange={setHighlightedSide}
+              isWorkHovered={isWorkHovered}
+            />
 
-          {/* Drag hint */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 1, 1, 0] }}
-            transition={{ duration: 4, delay: 1.5, times: [0, 0.1, 0.7, 1] }}
-            className="absolute -bottom-8 text-text-subtle text-xs pointer-events-none"
-          >
-            drag or tap to explore
-          </motion.p>
+            {/* Drag hint */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 1, 1, 0] }}
+              transition={{ duration: 4, delay: 1.5, times: [0, 0.1, 0.7, 1] }}
+              className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-text-subtle text-xs pointer-events-none whitespace-nowrap"
+            >
+              drag or tap to explore
+            </motion.p>
+          </div>
 
           {/* Right hint */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="absolute right-0 md:right-8 top-1/2 -translate-y-1/2 z-10"
+            className="z-10 shrink-0"
           >
             <motion.button
               onClick={() => router.push("/work")}
               onMouseEnter={() => setIsWorkHovered(true)}
               onMouseLeave={() => setIsWorkHovered(false)}
-              className={`text-sm md:text-base transition-colors relative z-10 ${
+              className={`text-sm md:text-base transition-colors ${
                 highlightedSide === "right"
                   ? "text-text-primary font-medium"
                   : "text-text-subtle hover:text-text-primary"

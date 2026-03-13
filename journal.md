@@ -40,12 +40,13 @@ Set in both `.env.local` (local dev) and Vercel (production).
 **Cause**: The `S3Client` was instantiated at the top level of `lib/r2.ts` (module scope). Environment variables are read once when the module first loads — if they're not available at that point, the endpoint becomes `https://undefined.r2.cloudflarestorage.com` and all requests fail silently.
 **Fix**: Moved S3 client creation into a `getS3Client()` function called inside `listR2Photos()`, so env vars are read at request time.
 
-#### Issue 3: Still not working on Vercel (INVESTIGATING)
+#### Issue 3: Env vars not available in Vercel runtime
 **Symptom**: After both fixes above, photos still show only the 7 hardcoded ones on the deployed site.
 **Local status**: Works perfectly locally — all 15 photos listed and probed in ~2.3 seconds.
-**Vercel env vars**: Confirmed set correctly (R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME) for Production, Preview, and Development.
-**Current theory**: Unknown Vercel-specific issue. Created `/api/debug-r2` diagnostic endpoint to inspect env var availability and S3 connectivity from the Vercel runtime.
-**Next step**: Deploy debug endpoint, hit `devarapu.dev/api/debug-r2`, and inspect the response.
+**Discovery**: Created `/api/debug-r2` diagnostic endpoint. Response showed all env vars as `false`/`"missing"` with error `"Resolved credential object is not valid"`.
+**Root cause (round 1)**: Env vars were initially set at the **Vercel Team level**, not the **Project level**. Fixed by user.
+**Root cause (round 2)**: Even after setting env vars at the project level, the debug endpoint still showed them as missing. The env vars were added at the same time as the deployment (~5 min gap). Vercel bakes env vars into deployments at build time — the build likely started before the env vars were fully saved.
+**Fix**: Trigger a new redeploy after env vars are confirmed set. Vercel does not hot-reload env vars into existing deployments.
 
 ### Verified Locally
 ```

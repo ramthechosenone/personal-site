@@ -1,17 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { getCategories, getPhotosByCategory } from "@/lib/photos";
+import type { Photo } from "@/lib/photos";
 import PhotoLightbox from "./PhotoLightbox";
 
-export default function PhotoGallery() {
-  const categories = getCategories();
+export default function PhotoGallery({ photos }: { photos: Photo[] }) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  const filtered = getPhotosByCategory(activeCategory);
+  const categories = useMemo(
+    () => Array.from(new Set(photos.map((p) => p.category).filter(Boolean) as string[])),
+    [photos]
+  );
+
+  const filtered = activeCategory
+    ? photos.filter((p) => p.category === activeCategory)
+    : photos;
 
   // Distribute photos into columns for true masonry
   const columnCount = { mobile: 2, desktop: 3 };
@@ -96,7 +102,7 @@ export default function PhotoGallery() {
       {/* Empty state */}
       {filtered.length === 0 && (
         <p className="text-text-subtle text-center py-20">
-          No photos yet — add entries to lib/photos.ts
+          No photos found.
         </p>
       )}
 

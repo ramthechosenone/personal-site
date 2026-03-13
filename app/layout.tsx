@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import HomeSphere from "@/components/layout/HomeSphere";
 
 export const metadata: Metadata = {
   title: "Sriram Devarapu",
@@ -19,7 +20,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <HomeSphere />
+      </body>
     </html>
   );
 }

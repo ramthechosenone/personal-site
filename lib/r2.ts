@@ -4,15 +4,6 @@ import type { Photo } from "./photos";
 
 const R2_PUBLIC_URL = "https://pub-253f4f98a29547d189d929dd4b0273e2.r2.dev";
 
-const s3 = new S3Client({
-  region: "auto",
-  endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
-  credentials: {
-    accessKeyId: process.env.R2_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
-  },
-});
-
 const IMAGE_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif"]);
 
 function isImage(key: string): boolean {
@@ -20,7 +11,19 @@ function isImage(key: string): boolean {
   return IMAGE_EXTENSIONS.has(ext);
 }
 
+function getS3Client() {
+  return new S3Client({
+    region: "auto",
+    endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+    credentials: {
+      accessKeyId: process.env.R2_ACCESS_KEY_ID!,
+      secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
+    },
+  });
+}
+
 export async function listR2Photos(): Promise<Photo[]> {
+  const s3 = getS3Client();
   const command = new ListObjectsV2Command({
     Bucket: process.env.R2_BUCKET_NAME!,
   });

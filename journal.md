@@ -45,8 +45,16 @@ Set in both `.env.local` (local dev) and Vercel (production).
 **Local status**: Works perfectly locally — all 15 photos listed and probed in ~2.3 seconds.
 **Discovery**: Created `/api/debug-r2` diagnostic endpoint. Response showed all env vars as `false`/`"missing"` with error `"Resolved credential object is not valid"`.
 **Root cause (round 1)**: Env vars were initially set at the **Vercel Team level**, not the **Project level**. Fixed by user.
-**Root cause (round 2)**: Even after setting env vars at the project level, the debug endpoint still showed them as missing. The env vars were added at the same time as the deployment (~5 min gap). Vercel bakes env vars into deployments at build time — the build likely started before the env vars were fully saved.
-**Fix**: Trigger a new redeploy after env vars are confirmed set. Vercel does not hot-reload env vars into existing deployments.
+**Root cause (round 2)**: Even after setting env vars at the project level on `personal-site`, the debug endpoint still showed them as missing. Enhanced the debug endpoint to list all R2-related env keys and show `totalEnvKeys`/`vercelEnv` — confirmed 54 env keys existed but zero contained "R2". This revealed the actual cause:
+**Root cause (round 3 — actual fix)**: The repo had **two Vercel projects** linked: `personal-site` and `personal-site-r1fr`. The custom domain `devarapu.dev` was assigned to `personal-site-r1fr`, but env vars were set on `personal-site`. The env vars needed to be added to the correct project.
+**Fix**: Added R2 env vars to the `personal-site-r1fr` project in Vercel. Photos now load correctly.
+**Status**: RESOLVED
+
+### Lessons Learned
+- When a repo has multiple Vercel projects, always verify which project serves the production domain before setting env vars
+- A `/api/debug-*` diagnostic endpoint is invaluable for debugging Vercel runtime issues — dump env var names (not values), `vercelEnv`, and `totalEnvKeys` to confirm the right deployment is being hit
+- Next.js `force-dynamic` is required for pages that fetch data from external APIs at request time
+- S3 clients should be created lazily (inside functions) in serverless environments, not at module scope
 
 ### Verified Locally
 ```
@@ -56,4 +64,4 @@ Total time: 2327 ms
 ```
 
 ### Timeline
-- **2026-03-13**: Initial implementation, discovered static prerendering issue, fixed with force-dynamic, discovered module-level S3 client issue, fixed with lazy init, still debugging Vercel deployment
+- **2026-03-13**: Initial implementation, discovered static prerendering issue, fixed with force-dynamic, discovered module-level S3 client issue, fixed with lazy init, debugged Vercel env vars across multiple projects, resolved — all 15 photos now loading

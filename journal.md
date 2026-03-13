@@ -1,0 +1,58 @@
+# Development Journal
+
+---
+
+## Cloudflare R2 Photos Integration
+
+### Goal
+Automatically list and display all photos from a Cloudflare R2 bucket on the photography page, eliminating the need to manually update `lib/photos.ts` every time a new photo is uploaded.
+
+### Background
+- Photos are stored in a public R2 bucket: `personal-website-photos`
+- Public URL: `https://pub-253f4f98a29547d189d929dd4b0273e2.r2.dev`
+- The photography page previously used a hardcoded array of 7 photos in `lib/photos.ts`
+- The bucket actually contains 15 photos (8 were missing from the site)
+
+### What We Built
+1. **`lib/r2.ts`** — Server-side utility using `@aws-sdk/client-s3` to list R2 bucket objects and `probe-image-size` to auto-detect image dimensions (only downloads a few KB per image via header probing)
+2. **Split photography page** into server component (`page.tsx`) + client component (`PhotographyClient.tsx`) so data fetching happens server-side
+3. **`PhotoGallery`** now accepts `photos` as a prop instead of importing the hardcoded list
+4. **Fallback**: if R2 listing fails, the page falls back to the hardcoded `lib/photos.ts` list
+
+### Environment Variables Required
+```
+R2_ACCOUNT_ID=<cloudflare account id>
+R2_ACCESS_KEY_ID=<r2 api token access key>
+R2_SECRET_ACCESS_KEY=<r2 api token secret>
+R2_BUCKET_NAME=personal-website-photos
+```
+Set in both `.env.local` (local dev) and Vercel (production).
+
+### Issues Encountered
+
+#### Issue 1: Photos not showing after first deploy
+**Symptom**: Photography page still showed only the 7 hardcoded photos after deploying.
+**Cause**: The photography page was statically prerendered at build time (`○ Static` in build output). Since the R2 call happened at build time and may have failed (env vars not yet set), it fell back to the hardcoded list and cached that result.
+**Fix**: Added `export const dynamic = "force-dynamic"` to `app/personal/photography/page.tsx` to force server-side rendering on every request.
+
+#### Issue 2: S3 client created at module load time
+**Symptom**: Photos still not appearing even after adding `force-dynamic`.
+**Cause**: The `S3Client` was instantiated at the top level of `lib/r2.ts` (module scope). Environment variables are read once when the module first loads — if they're not available at that point, the endpoint becomes `https://undefined.r2.cloudflarestorage.com` and all requests fail silently.
+**Fix**: Moved S3 client creation into a `getS3Client()` function called inside `listR2Photos()`, so env vars are read at request time.
+
+#### Issue 3: Still not working on Vercel (INVESTIGATING)
+**Symptom**: After both fixes above, photos still show only the 7 hardcoded ones on the deployed site.
+**Local status**: Works perfectly locally — all 15 photos listed and probed in ~2.3 seconds.
+**Vercel env vars**: Confirmed set correctly (R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME) for Production, Preview, and Development.
+**Current theory**: Unknown Vercel-specific issue. Created `/api/debug-r2` diagnostic endpoint to inspect env var availability and S3 connectivity from the Vercel runtime.
+**Next step**: Deploy debug endpoint, hit `devarapu.dev/api/debug-r2`, and inspect the response.
+
+### Verified Locally
+```
+Listed 15 objects in 188 ms
+All 15 images probed successfully
+Total time: 2327 ms
+```
+
+### Timeline
+- **2026-03-13**: Initial implementation, discovered static prerendering issue, fixed with force-dynamic, discovered module-level S3 client issue, fixed with lazy init, still debugging Vercel deployment

@@ -2,6 +2,8 @@ import { listR2Photos } from "@/lib/r2";
 import { photos as fallbackPhotos } from "@/lib/photos";
 import PhotographyClient from "./PhotographyClient";
 
+export const dynamic = "force-dynamic";
+
 export default async function Photography() {
   let photos = fallbackPhotos;
   try {

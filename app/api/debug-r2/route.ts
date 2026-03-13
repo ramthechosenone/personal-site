@@ -4,6 +4,11 @@ import { S3Client, ListObjectsV2Command } from "@aws-sdk/client-s3";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  // List all env var names that contain "R2" or start with common prefixes
+  const allEnvKeys = Object.keys(process.env).filter(
+    (k) => k.includes("R2") || k.includes("CLOUDFLARE") || k.includes("BUCKET")
+  );
+
   const diagnostics: Record<string, unknown> = {
     hasAccountId: !!process.env.R2_ACCOUNT_ID,
     hasAccessKeyId: !!process.env.R2_ACCESS_KEY_ID,
@@ -11,6 +16,10 @@ export async function GET() {
     hasBucketName: !!process.env.R2_BUCKET_NAME,
     accountIdPrefix: process.env.R2_ACCOUNT_ID?.slice(0, 6) ?? "missing",
     bucketName: process.env.R2_BUCKET_NAME ?? "missing",
+    relevantEnvKeys: allEnvKeys,
+    totalEnvKeys: Object.keys(process.env).length,
+    nodeEnv: process.env.NODE_ENV,
+    vercelEnv: process.env.VERCEL_ENV,
   };
 
   try {

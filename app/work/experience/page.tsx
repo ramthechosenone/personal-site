@@ -37,6 +37,21 @@ const roles = [
           "Optimized recurring billing engines using C# and the Payflow Pro SDK, improving payment reliability and reducing manual reconciliation overhead.",
         ],
       },
+      {
+        area: "Data Integration & ETL Pipelines",
+        bullets: [
+          "Built bidirectional data sync pipelines between webinar platforms and CRM systems, handling contact resolution, deduplication, and automated activity recording with daily batch processing.",
+          "Developed configurable import services supporting bulk data ingestion from Excel and third-party APIs, with validation, error reporting, and HTML email summaries via SendGrid.",
+          "Designed salary survey data collection pipelines and membership attribute batch update tools processing thousands of records with detailed audit logging.",
+        ],
+      },
+      {
+        area: "Certification & Compliance Systems",
+        bullets: [
+          "Implemented professional certification tracking workflows managing CEU credits, CMO categories, and multi-tier credential maintenance (Basic, Advanced, Emeritus) with hour-based progression rules.",
+          "Built course completion synchronization between LMS platforms and membership systems, including certificate number generation, duplicate award prevention, and multi-department support.",
+        ],
+      },
     ],
   },
   {

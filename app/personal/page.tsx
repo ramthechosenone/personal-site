@@ -72,19 +72,27 @@ function getPersonalSections(): PersonalSection[] {
               everything else in perspective. The summit is never the point — it's who you
               become on the way up.
             </p>
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              <Image
-                src={`${R2}/hikes/IMG-20200808-WA0016.jpg`}
-                width={1024}
-                height={768}
-                alt="Hiking trail"
-                className="rounded-lg w-full h-auto"
-                sizes="(max-width: 768px) 45vw, 30vw"
-              />
+            <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {[
+                { src: "hikes/IMG_3711.jpg", w: 3024, h: 4032 },
+                { src: "hikes/IMG_0023.jpg", w: 3024, h: 4032 },
+                { src: "hikes/IMG_6325.jpg", w: 3061, h: 2040 },
+                { src: "hikes/IMG_0158.jpg", w: 3024, h: 4032 },
+                { src: "hikes/IMG_4053.jpg", w: 3024, h: 4032 },
+                { src: "hikes/IMG_4208.jpg", w: 3024, h: 4032 },
+                { src: "hikes/IMG-20200808-WA0016.jpg", w: 1024, h: 768 },
+              ].map((photo) => (
+                <Image
+                  key={photo.src}
+                  src={`${R2}/${photo.src}`}
+                  width={photo.w}
+                  height={photo.h}
+                  alt="Hiking"
+                  className="rounded-lg w-full h-auto"
+                  sizes="(max-width: 640px) 45vw, 30vw"
+                />
+              ))}
             </div>
-            <p className="text-xs text-text-subtle mt-2 italic">
-              More photos coming soon — re-uploading from HEIC format.
-            </p>
           </div>
         </div>
       ),

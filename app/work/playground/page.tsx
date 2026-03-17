@@ -29,6 +29,33 @@ const projects: Project[] = [
     ],
   },
   {
+    title: "Movie Recommender",
+    tech: "Python, SVD Collaborative Filtering, TMDB API, FastAPI, Next.js, Google Cloud Run",
+    description:
+      "A hybrid movie/TV/anime recommendation engine trained on 25M MovieLens ratings. Uses SVD-200 collaborative filtering for catalog movies (0.80 NDCG@10, 71.7% Precision@10) with TMDB API fallback for newer content. Intelligent routing combines both engines with proportional interleaving, and every recommendation includes a human-readable explanation.",
+    links: [
+      { label: "Open App", href: "/movies" },
+      {
+        label: "GitHub",
+        href: "https://github.com/ramthechosenone",
+        external: true,
+      },
+    ],
+  },
+  {
+    title: "Afterthoughts",
+    tech: "Swift, SwiftUI, SwiftData, Firebase, TMDB API, OMDb API",
+    description:
+      "An iOS app for logging and sharing movie, TV, and anime reviews. Features five-category ratings, customizable review criteria, shareable social media cards, and AI-powered recommendations via a custom SVD engine. Cloud sync with Firebase Firestore, offline-first architecture, and Google/Apple Sign-In.",
+    links: [
+      {
+        label: "GitHub",
+        href: "https://github.com/ramthechosenone",
+        external: true,
+      },
+    ],
+  },
+  {
     title: "Churn Prediction Microservice",
     tech: "Python, Flask, Scikit-learn, REST API",
     description:
@@ -90,7 +117,7 @@ export default function Playground() {
           transition={{ duration: 0.5 }}
           className="text-2xl font-semibold text-text-primary text-center mb-10"
         >
-          Playground / Experiments
+          Side Projects
         </motion.h1>
 
         <motion.div

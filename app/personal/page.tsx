@@ -35,7 +35,38 @@ function getPersonalSections(router: ReturnType<typeof useRouter>): PersonalSect
     },
     {
       label: "Now",
-      content: "TODO: Add current focus and activities",
+      content: (
+        <div className="space-y-5 text-sm leading-relaxed">
+          <div>
+            <h3 className="text-text-primary font-medium mb-2">Currently Building</h3>
+            <ul className="space-y-1 text-text-subtle">
+              <li className="pl-4 border-l-2 border-border">Afterthoughts iOS app — polishing for App Store</li>
+              <li className="pl-4 border-l-2 border-border">Movie Recommender — hybrid SVD + TMDB engine</li>
+              <li className="pl-4 border-l-2 border-border">This personal site (always evolving)</li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-text-primary font-medium mb-2">Currently Learning / Exploring</h3>
+            <ul className="space-y-1 text-text-subtle">
+              <li className="pl-4 border-l-2 border-border">Agentic AI workflows with Claude Code</li>
+              <li className="pl-4 border-l-2 border-border">iOS development with SwiftUI + SwiftData</li>
+              <li className="pl-4 border-l-2 border-border">ML pipelines end-to-end (training → deployment → serving)</li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-text-primary font-medium mb-2">Currently Into</h3>
+            <ul className="space-y-1 text-text-subtle">
+              <li className="pl-4 border-l-2 border-border">Following Man United through another &ldquo;rebuilding year&rdquo;</li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-text-primary font-medium mb-2">Currently Reading / Watching</h3>
+            <ul className="space-y-1 text-text-subtle">
+              <li className="pl-4 border-l-2 border-border italic">Coming soon</li>
+            </ul>
+          </div>
+        </div>
+      ),
       illustration: <NowBird />,
     },
     // {

@@ -53,7 +53,15 @@ function getPersonalSections(): PersonalSection[] {
               to stay calm, trust your inputs, and commit to the line. There's no undo button
               at 100 mph.
             </p>
-            <div className="mt-3">
+            <div className="mt-3 space-y-2">
+              <Image
+                src={`${R2}/racetrack/IMG-20161019-WA0026.jpg`}
+                width={1600}
+                height={1066}
+                alt="Scion FR-S on the track"
+                className="rounded-lg w-full h-auto"
+                sizes="(max-width: 768px) 90vw, 50vw"
+              />
               <video
                 src={`${R2}/racetrack/VID_55160520_095134_907.mp4`}
                 controls

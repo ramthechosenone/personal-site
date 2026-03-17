@@ -102,19 +102,52 @@ export default function Play() {
               everything else in perspective. The summit is never the point — it's who you
               become on the way up.
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {hikePhotos.map((photo) => (
-                <Image
-                  key={photo.src}
-                  src={`${R2}/${photo.src}`}
-                  width={photo.w}
-                  height={photo.h}
-                  alt="Hiking"
-                  className="rounded-lg w-full h-auto"
-                  sizes="(max-width: 640px) 45vw, 30vw"
-                />
-              ))}
-            </div>
+            {(() => {
+              const cols: typeof hikePhotos[] = [[], [], []];
+              hikePhotos.forEach((p, i) => cols[i % 3].push(p));
+              return (
+                <div className="hidden sm:grid sm:grid-cols-3 gap-2">
+                  {cols.map((col, ci) => (
+                    <div key={ci} className="flex flex-col gap-2">
+                      {col.map((photo) => (
+                        <Image
+                          key={photo.src}
+                          src={`${R2}/${photo.src}`}
+                          width={photo.w}
+                          height={photo.h}
+                          alt="Hiking"
+                          className="rounded-lg w-full h-auto"
+                          sizes="30vw"
+                        />
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
+            {(() => {
+              const cols: typeof hikePhotos[] = [[], []];
+              hikePhotos.forEach((p, i) => cols[i % 2].push(p));
+              return (
+                <div className="grid grid-cols-2 gap-2 sm:hidden">
+                  {cols.map((col, ci) => (
+                    <div key={ci} className="flex flex-col gap-2">
+                      {col.map((photo) => (
+                        <Image
+                          key={photo.src}
+                          src={`${R2}/${photo.src}`}
+                          width={photo.w}
+                          height={photo.h}
+                          alt="Hiking"
+                          className="rounded-lg w-full h-auto"
+                          sizes="45vw"
+                        />
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
           </motion.section>
         </motion.div>
       </div>

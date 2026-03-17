@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import SiteShell from "@/components/layout/SiteShell";
 import BackButton from "@/components/layout/BackButton";
+import MovieRecommenderDiagram from "@/components/diagrams/MovieRecommenderDiagram";
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -61,10 +62,7 @@ export default function MovieRecommenderDeepDive() {
           {/* Architecture */}
           <motion.section variants={fadeUp} className="space-y-3">
             <h2 className="text-lg font-medium text-text-primary">Architecture</h2>
-            {/* TODO: Excalidraw diagram */}
-            <div className="border border-border bg-elevated p-8 text-center text-text-subtle text-sm italic">
-              Architecture diagram coming soon
-            </div>
+            <MovieRecommenderDiagram />
           </motion.section>
 
           {/* Data & Training */}

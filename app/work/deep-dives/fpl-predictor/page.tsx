@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import SiteShell from "@/components/layout/SiteShell";
 import BackButton from "@/components/layout/BackButton";
+import FPLPredictorDiagram from "@/components/diagrams/FPLPredictorDiagram";
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -60,10 +61,7 @@ export default function FPLDeepDive() {
           {/* Architecture */}
           <motion.section variants={fadeUp} className="space-y-3">
             <h2 className="text-lg font-medium text-text-primary">Architecture</h2>
-            {/* TODO: Excalidraw diagram */}
-            <div className="border border-border bg-elevated p-8 text-center text-text-subtle text-sm italic">
-              Architecture diagram coming soon
-            </div>
+            <FPLPredictorDiagram />
           </motion.section>
 
           {/* Data Pipeline */}

@@ -145,111 +145,128 @@ function SectionLabel({
 }
 
 export default function FPLPredictorDiagram() {
+  // Center column x for main flow
+  const cx = 350;
+
   return (
     <svg
-      viewBox="0 0 700 540"
+      viewBox="0 0 700 620"
       className="w-full h-auto"
       role="img"
       aria-label="FPL Predictor architecture diagram"
     >
-      <rect width={700} height={540} fill={COLORS.bg} rx={8} />
+      <rect width={700} height={620} fill={COLORS.bg} rx={8} />
 
-      {/* ── DATA SOURCES (top) ── */}
-      <SectionLabel x={30} y={30} label="Data Sources" />
+      {/* ── DATA SOURCES ── */}
+      <SectionLabel x={30} y={28} label="Data Sources" />
 
-      <Box x={30} y={45} w={130} h={40} label="FPL API" sub="600+ players/GW" />
-      <Box x={190} y={45} w={130} h={40} label="FBref" sub="xG, xA, SCA" />
-      <Box x={350} y={45} w={130} h={40} label="Vaastav GitHub" sub="historical GW data" />
+      <Box x={30} y={42} w={180} h={40} label="FPL API" sub="600+ players per gameweek" />
+      <Box x={250} y={42} w={180} h={40} label="FBref" sub="xG, xA, SCA, progressive" />
+      <Box x={470} y={42} w={180} h={40} label="Vaastav GitHub" sub="historical GW data" />
 
-      {/* Arrows to ingestion */}
-      <Arrow x1={95} y1={85} x2={300} y2={120} />
-      <Arrow x1={255} y1={85} x2={300} y2={120} />
-      <Arrow x1={415} y1={85} x2={300} y2={120} />
+      {/* Arrows down to Ingest */}
+      <Arrow x1={120} y1={82} x2={cx} y2={110} />
+      <Arrow x1={340} y1={82} x2={cx} y2={110} />
+      <Arrow x1={560} y1={82} x2={cx} y2={110} />
 
       {/* ── FEATURE ENGINEERING ── */}
-      <SectionLabel x={30} y={112} label="Feature Engineering" />
+      <SectionLabel x={30} y={108} label="Feature Engineering" />
 
-      <Box x={220} y={120} w={160} h={40} label="Ingest & Merge" sub="clean, normalize, join" />
-      <Arrow x1={300} y1={160} x2={300} y2={185} />
+      <Box x={cx - 100} y={115} w={200} h={40} label="Ingest & Merge" sub="clean, normalize, join" />
+      <Arrow x1={cx} y1={155} x2={cx} y2={180} />
 
-      <Box x={180} y={185} w={240} h={50} label="99 Features × 8 Categories" sub="rolling, form, opponent, fixture, H2H, trajectory, value, EMA" />
-      <Arrow x1={300} y1={235} x2={300} y2={260} />
+      <Box x={cx - 110} y={180} w={220} h={45} label="99 Features" sub="8 categories (see right)" />
 
-      {/* ── TRAINING ── */}
-      <SectionLabel x={30} y={258} label="Training Pipeline" />
-
-      <Box x={200} y={265} w={200} h={40} label="Time-Series Split" sub="season-aware train/test" />
-      <Arrow x1={300} y1={305} x2={300} y2={330} />
-
-      <Box x={200} y={330} w={200} h={45} label="XGBoost Regressor" sub="best_model.joblib" />
-
-      {/* Comparison box */}
-      <rect x={440} y={330} width={130} height={45} rx={4} fill="none" stroke={COLORS.boxStroke} strokeWidth={1} strokeDasharray="4 2" />
-      <text x={505} y={347} textAnchor="middle" fill={COLORS.text} fontSize={9} fontWeight={600} fontFamily="IBM Plex Mono, monospace">
-        vs Random Forest
+      {/* Key features sidebar — right side, clear of main flow */}
+      <rect x={510} y={110} width={160} height={125} rx={4} fill="none" stroke={COLORS.boxStroke} strokeWidth={1} strokeDasharray="4 2" />
+      <text x={590} y={128} textAnchor="middle" fill={COLORS.text} fontSize={9} fontWeight={600} fontFamily="IBM Plex Mono, monospace">
+        Feature Categories
       </text>
-      <text x={505} y={363} textAnchor="middle" fill={COLORS.subtle} fontSize={9} fontFamily="IBM Plex Mono, monospace">
-        XGBoost wins on RMSE
-      </text>
-      <Arrow x1={400} y1={352} x2={440} y2={352} />
-
-      {/* ── SERVING ── */}
-      <SectionLabel x={30} y={405} label="Serving" />
-
-      <Arrow x1={300} y1={375} x2={300} y2={415} />
-
-      <Box x={210} y={415} w={180} h={45} label="FastAPI on Cloud Run" sub="/predict, /predict/top" />
-
-      {/* Endpoints detail */}
-      <rect x={440} y={415} width={140} height={45} rx={4} fill="none" stroke={COLORS.boxStroke} strokeWidth={1} strokeDasharray="4 2" />
-      <text x={510} y={432} textAnchor="middle" fill={COLORS.text} fontSize={9} fontWeight={600} fontFamily="IBM Plex Mono, monospace">
-        Endpoints
-      </text>
-      <text x={510} y={448} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
-        /health /predict/position
-      </text>
-      <Arrow x1={390} y1={437} x2={440} y2={437} />
-
-      {/* Frontend */}
-      <Arrow x1={300} y1={460} x2={300} y2={485} />
-      <Box x={210} y={485} w={180} h={40} label="Next.js Frontend" sub="filter by pos, team, price" />
-
-      {/* Feature categories sidebar */}
-      <rect x={30} y={145} width={130} height={135} rx={4} fill="none" stroke={COLORS.boxStroke} strokeWidth={1} strokeDasharray="4 2" />
-      <text x={95} y={163} textAnchor="middle" fill={COLORS.text} fontSize={9} fontWeight={600} fontFamily="IBM Plex Mono, monospace">
-        Key Features
-      </text>
-      <text x={95} y={180} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
+      <text x={590} y={145} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
         rolling avg (3/5/10 GW)
       </text>
-      <text x={95} y={194} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
+      <text x={590} y={159} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
         xG, xA, SCA
       </text>
-      <text x={95} y={208} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
+      <text x={590} y={173} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
         fixture difficulty
       </text>
-      <text x={95} y={222} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
+      <text x={590} y={187} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
         opponent strength
       </text>
-      <text x={95} y={236} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
+      <text x={590} y={201} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
         form & momentum
       </text>
-      <text x={95} y={250} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
-        H2H record
+      <text x={590} y={215} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
+        H2H record & EMA
       </text>
-      <text x={95} y={264} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
-        EMA smoothing
+      <text x={590} y={229} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
+        value & trajectory
       </text>
 
-      {/* Weekly retraining note */}
-      <rect x={530} y={265} width={140} height={40} rx={4} fill="none" stroke={COLORS.boxStroke} strokeWidth={1} strokeDasharray="4 2" />
-      <text x={600} y={282} textAnchor="middle" fill={COLORS.text} fontSize={9} fontWeight={600} fontFamily="IBM Plex Mono, monospace">
+      {/* Connector from features box to sidebar */}
+      <Arrow x1={cx + 110} y1={202} x2={510} y2={185} />
+
+      <Arrow x1={cx} y1={225} x2={cx} y2={270} />
+
+      {/* ── TRAINING PIPELINE ── */}
+      <SectionLabel x={30} y={268} label="Training Pipeline" />
+
+      <Box x={cx - 110} y={275} w={220} h={40} label="Time-Series Split" sub="season-aware train/test" />
+      <Arrow x1={cx} y1={315} x2={cx} y2={345} />
+
+      <Box x={cx - 110} y={345} w={220} h={45} label="XGBoost Regressor" sub="best_model.joblib" />
+
+      {/* vs Random Forest — right side */}
+      <rect x={510} y={348} width={150} height={40} rx={4} fill="none" stroke={COLORS.boxStroke} strokeWidth={1} strokeDasharray="4 2" />
+      <text x={585} y={363} textAnchor="middle" fill={COLORS.text} fontSize={9} fontWeight={600} fontFamily="IBM Plex Mono, monospace">
+        vs Random Forest
+      </text>
+      <text x={585} y={379} textAnchor="middle" fill={COLORS.subtle} fontSize={9} fontFamily="IBM Plex Mono, monospace">
+        XGBoost wins on RMSE
+      </text>
+      <Arrow x1={cx + 110} y1={367} x2={510} y2={367} />
+
+      {/* Weekly retrain — left side */}
+      <rect x={30} y={348} width={150} height={40} rx={4} fill="none" stroke={COLORS.boxStroke} strokeWidth={1} strokeDasharray="4 2" />
+      <text x={105} y={363} textAnchor="middle" fill={COLORS.text} fontSize={9} fontWeight={600} fontFamily="IBM Plex Mono, monospace">
         Weekly Retrain
       </text>
-      <text x={600} y={296} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
-        fresh GW data → retrain
+      <text x={105} y={379} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
+        fresh GW data each week
       </text>
-      <Arrow x1={530} y1={285} x2={400} y2={310} label="schedule" />
+      <Arrow x1={180} y1={367} x2={cx - 110} y2={367} />
+
+      <Arrow x1={cx} y1={390} x2={cx} y2={435} />
+
+      {/* ── SERVING ── */}
+      <SectionLabel x={30} y={433} label="Serving" />
+
+      <Box x={cx - 110} y={440} w={220} h={45} label="FastAPI on Cloud Run" sub="/predict, /predict/top" />
+
+      {/* Endpoints — right side */}
+      <rect x={510} y={443} width={150} height={40} rx={4} fill="none" stroke={COLORS.boxStroke} strokeWidth={1} strokeDasharray="4 2" />
+      <text x={585} y={458} textAnchor="middle" fill={COLORS.text} fontSize={9} fontWeight={600} fontFamily="IBM Plex Mono, monospace">
+        Endpoints
+      </text>
+      <text x={585} y={474} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
+        /health /predict/position
+      </text>
+      <Arrow x1={cx + 110} y1={462} x2={510} y2={462} />
+
+      {/* Frontend */}
+      <Arrow x1={cx} y1={485} x2={cx} y2={530} />
+      <Box x={cx - 110} y={530} w={220} h={45} label="Next.js Frontend" sub="filter by pos, team, price" />
+
+      {/* Scales to zero note — left side */}
+      <rect x={30} y={533} width={150} height={40} rx={4} fill="none" stroke={COLORS.boxStroke} strokeWidth={1} strokeDasharray="4 2" />
+      <text x={105} y={548} textAnchor="middle" fill={COLORS.text} fontSize={9} fontWeight={600} fontFamily="IBM Plex Mono, monospace">
+        Cloud Run
+      </text>
+      <text x={105} y={564} textAnchor="middle" fill={COLORS.subtle} fontSize={8} fontFamily="IBM Plex Mono, monospace">
+        scales to zero when idle
+      </text>
+      <Arrow x1={180} y1={553} x2={cx - 110} y2={553} />
     </svg>
   );
 }

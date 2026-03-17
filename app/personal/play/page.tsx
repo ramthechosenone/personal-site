@@ -9,7 +9,6 @@ const R2 = "https://pub-253f4f98a29547d189d929dd4b0273e2.r2.dev";
 
 const hikePhotos = [
   { src: "hikes/IMG_3711.jpg", w: 3024, h: 4032 },
-  { src: "hikes/IMG_0023.jpg", w: 3024, h: 4032 },
   { src: "hikes/IMG_6325.jpg", w: 3061, h: 2040 },
   { src: "hikes/IMG_0158.jpg", w: 3024, h: 4032 },
   { src: "hikes/IMG_4053.jpg", w: 3024, h: 4032 },

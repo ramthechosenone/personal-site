@@ -3,6 +3,7 @@
 import { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import SiteShell from "@/components/layout/SiteShell";
 import BackButton from "@/components/layout/BackButton";
 import PillKey from "@/components/common/PillKey";
@@ -13,6 +14,8 @@ import {
   NowBird,
   MeditatingBird,
 } from "@/components/personal/birds";
+
+const R2 = "https://pub-253f4f98a29547d189d929dd4b0273e2.r2.dev";
 
 type PersonalSection = {
   label: string;
@@ -50,7 +53,15 @@ function getPersonalSections(): PersonalSection[] {
               to stay calm, trust your inputs, and commit to the line. There's no undo button
               at 100 mph.
             </p>
-            {/* TODO: Add track photo from R2 and video embed */}
+            <div className="mt-3">
+              <video
+                src={`${R2}/racetrack/VID_55160520_095134_907.mp4`}
+                controls
+                playsInline
+                preload="metadata"
+                className="w-full rounded-lg"
+              />
+            </div>
           </div>
 
           <div>
@@ -61,7 +72,19 @@ function getPersonalSections(): PersonalSection[] {
               everything else in perspective. The summit is never the point — it's who you
               become on the way up.
             </p>
-            {/* TODO: Add hiking photos from R2 */}
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              <Image
+                src={`${R2}/hikes/IMG-20200808-WA0016.jpg`}
+                width={1024}
+                height={768}
+                alt="Hiking trail"
+                className="rounded-lg w-full h-auto"
+                sizes="(max-width: 768px) 45vw, 30vw"
+              />
+            </div>
+            <p className="text-xs text-text-subtle mt-2 italic">
+              More photos coming soon — re-uploading from HEIC format.
+            </p>
           </div>
         </div>
       ),

@@ -54,15 +54,6 @@ const roles = [
       },
     ],
   },
-  {
-    title: "SAP Basis Consultant",
-    org: "Larsen and Toubro Infotech",
-    location: "Bengaluru, India",
-    period: "Aug 2011 – Aug 2013",
-    summary:
-      "SAP system administration and basis consulting for enterprise clients.",
-    highlights: [],
-  },
 ];
 
 const education = [

@@ -30,7 +30,41 @@ function getPersonalSections(): PersonalSection[] {
     },
     {
       label: "Play & Movement",
-      content: "TODO: Add play and movement content",
+      content: (
+        <div className="space-y-6 text-sm leading-relaxed">
+          <div>
+            <h3 className="text-text-primary font-medium mb-1">The Beautiful Game</h3>
+            <p>
+              Football is where I find flow outside of code. Whether it's a weekend pickup match,
+              following Manchester United through the highs and the heartbreak, or grinding
+              through rivals on EAFC — the game teaches you the same things engineering does:
+              read the field, make decisions under pressure, and never stop moving forward.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-text-primary font-medium mb-1">Track Days</h3>
+            <p>
+              I take my Scion FR-S to the track when I need to think with my hands instead of
+              a keyboard. High performance driving is a lot like debugging production — you need
+              to stay calm, trust your inputs, and commit to the line. There's no undo button
+              at 100 mph.
+            </p>
+            {/* TODO: Add track photo from R2 and video embed */}
+          </div>
+
+          <div>
+            <h3 className="text-text-primary font-medium mb-1">Mountains & Trails</h3>
+            <p>
+              Hiking is how I reset. There's something about putting one foot in front of the
+              other for hours, gaining elevation with nothing but your own effort, that puts
+              everything else in perspective. The summit is never the point — it's who you
+              become on the way up.
+            </p>
+            {/* TODO: Add hiking photos from R2 */}
+          </div>
+        </div>
+      ),
       illustration: <PlayBird />,
     },
     {

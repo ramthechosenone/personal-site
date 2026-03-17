@@ -30,9 +30,14 @@ export default function Work() {
             onClick={() => router.push("/work/skills")}
           />
           <PillKey
-            label="Deep Dives"
+            label="Case Studies"
             variant="box"
             onClick={() => router.push("/work/case-studies")}
+          />
+          <PillKey
+            label="Deep Dives"
+            variant="box"
+            onClick={() => router.push("/work/deep-dives")}
           />
           <PillKey
             label="Side Projects"

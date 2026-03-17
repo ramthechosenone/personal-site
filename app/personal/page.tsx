@@ -24,8 +24,8 @@ type PersonalSection = {
 function getPersonalSections(router: ReturnType<typeof useRouter>): PersonalSection[] {
   return [
     {
-      label: "Writing & Reflections",
-      content: "TODO: Add writing and reflections",
+      label: "Reflections",
+      content: "TODO: Add reflections",
       illustration: <WritingBird />,
     },
     {
@@ -38,11 +38,11 @@ function getPersonalSections(router: ReturnType<typeof useRouter>): PersonalSect
       content: "TODO: Add current focus and activities",
       illustration: <NowBird />,
     },
-    {
-      label: "Awareness & Frameworks",
-      content: "TODO: Add awareness and frameworks",
-      illustration: <MeditatingBird />,
-    },
+    // {
+    //   label: "Awareness & Frameworks",
+    //   content: "TODO: Add awareness and frameworks",
+    //   illustration: <MeditatingBird />,
+    // },
   ];
 }
 

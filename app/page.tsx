@@ -23,12 +23,13 @@ export default function Home() {
           <h1 className="text-3xl font-medium text-text-primary mb-4">
             Sriram Devarapu
           </h1>
-          <motion.button
+          {/* TODO: Re-enable when schedule is fixed */}
+          {/* <motion.button
             onClick={() => router.push("/schedule")}
             className="text-text-subtle text-sm hover:text-text-primary transition-colors underline underline-offset-2"
           >
             Schedule a time with me
-          </motion.button>
+          </motion.button> */}
         </motion.div>
 
         <div className="relative flex items-center justify-center gap-6 md:gap-10">

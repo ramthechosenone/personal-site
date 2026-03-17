@@ -31,9 +31,10 @@ export async function listR2Photos(): Promise<Photo[]> {
   const response = await s3.send(command);
   const objects = response.Contents ?? [];
 
+  // Only include top-level images (exclude subfolders like hikes/, racetrack/)
   const imageKeys = objects
     .map((obj) => obj.Key!)
-    .filter((key) => key && isImage(key));
+    .filter((key) => key && isImage(key) && !key.includes("/"));
 
   const photos = await Promise.all(
     imageKeys.map(async (key): Promise<Photo | null> => {

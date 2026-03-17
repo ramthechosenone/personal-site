@@ -15,6 +15,7 @@ const hikePhotos = [
   { src: "hikes/IMG_4053.jpg", w: 3024, h: 4032 },
   { src: "hikes/IMG_4208.jpg", w: 3024, h: 4032 },
   { src: "hikes/IMG-20200808-WA0016.jpg", w: 1024, h: 768 },
+  { src: "hikes/Screenshot 2026-03-16 at 10.51.24\u202FPM.png", w: 1194, h: 972 },
 ];
 
 const stagger = {

@@ -172,7 +172,7 @@ export default function ChamberScene({
 
       {/* LANDSCAPE through arch */}
       {showLandscape && (
-        <g clipPath="url(#archClip)" style={p(3)}>
+        <g clipPath="url(#archClip)" style={p(3)} data-layer="sky">
           <rect x="0" y="0" width="1920" height="1080" fill="url(#chSky)" />
           <circle cx="960" cy="540" r="180" fill="url(#chSun)" />
           <circle cx="960" cy="540" r="22" fill="oklch(0.98 0.06 75)" opacity="0.75" />
@@ -200,7 +200,7 @@ export default function ChamberScene({
       )}
 
       {/* STONE FRAME around arch */}
-      <g>
+      <g data-layer="arch">
         <ellipse cx={cx} cy={floor - pillarH * 0.5} rx={archW * 1.4} ry={pillarH * 0.95} fill="url(#chamberGlow)" />
         <path
           d={`
@@ -285,7 +285,7 @@ export default function ChamberScene({
 
       {/* Hanging lanterns */}
       {showLanterns && (
-        <g opacity="0.9">
+        <g opacity="0.9" data-layer="lanterns">
           {[
             [240, 320],
             [1680, 320],

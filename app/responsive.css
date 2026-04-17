@@ -1,0 +1,254 @@
+/* =========================================================
+   Responsive overrides — loaded last, layered on top of
+   the desktop-first base in globals.css. Do not edit base
+   styles to make mobile work; add rules here.
+
+   Breakpoints:
+     ≤ 1024  laptop / tablet landscape
+     ≤ 900   small laptop / tablet portrait
+     ≤ 700   phone portrait (major shift)
+     ≤ 420   small phone (arch hides)
+   Plus: landscape phones, coarse pointer, reduced motion.
+   ========================================================= */
+
+
+/* =========================================================
+   Medium: ≤ 1024
+   ========================================================= */
+@media (max-width: 1024px) {
+  .alcove-row {
+    padding: 0 clamp(24px, 4vw, 60px);
+    gap: clamp(14px, 1.6vw, 24px);
+  }
+
+  .polaroid {
+    width: clamp(120px, 12vw, 160px);
+  }
+}
+
+
+/* =========================================================
+   Small laptop / tablet portrait: ≤ 900
+   Alcoves collapse 4/5 → 2. Polaroid cords shorten.
+   ========================================================= */
+@media (max-width: 900px) {
+  .alcove-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(14px, 2vw, 22px);
+    padding: 0 clamp(28px, 5vw, 64px);
+  }
+  .alcove { aspect-ratio: 4 / 3.2; }
+  .alcove-glyph-wrap { top: 22%; width: 48%; }
+  .alcove-title { font-size: 13px; }
+  .alcove-num { font-size: 9.5px; }
+
+  .polaroid-line {
+    height: clamp(160px, 22vh, 210px);
+  }
+  .polaroid {
+    width: clamp(110px, 14vw, 150px);
+  }
+}
+
+
+/* =========================================================
+   Phone portrait: ≤ 700
+   Polaroids collapse to a vertical scroll; cords hidden.
+   ========================================================= */
+@media (max-width: 700px) {
+  body { font-size: 13px; }
+
+  .gallery-title-mono {
+    top: 16px;
+    left: 16px;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+  }
+  .room-back {
+    top: 44px;
+    left: 16px;
+  }
+
+  /* Reduce mote density so the scene stays calm */
+  .mote:nth-child(3n) { display: none; }
+
+  /* Alcoves stay 2-col (already set at ≤900); tighten more */
+  .alcove-row {
+    gap: 14px;
+    padding: 0 16px;
+  }
+  .alcove { aspect-ratio: 1 / 1.2; }
+
+  /* --- Photography: cords → single vertical scroll --- */
+  .polaroid-stage {
+    position: absolute;
+    top: 44vh;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: auto;
+    padding: 0 0 20px;
+    gap: 0;
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    pointer-events: auto;
+    mask-image: linear-gradient(180deg,
+      transparent 0%,
+      black 8%,
+      black 96%,
+      transparent 100%);
+    -webkit-mask-image: linear-gradient(180deg,
+      transparent 0%,
+      black 8%,
+      black 96%,
+      transparent 100%);
+  }
+
+  .polaroid-line {
+    height: auto;
+    width: 100%;
+    overflow: visible;
+    padding: 0;
+  }
+  .polaroid-line::before,
+  .polaroid-line::after { display: none; }
+
+  .polaroid-cord { display: none; }
+
+  .polaroid-track {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    padding: 32px 16px;
+    width: 100%;
+    min-width: 0;
+    justify-content: flex-start;
+  }
+
+  .polaroid {
+    width: min(78vw, 280px);
+    max-width: 280px;
+    scroll-snap-align: none;
+    transform: rotate(calc(var(--tilt, 0deg) * 0.6));
+    animation-duration: 0.5s;
+    animation-delay: calc(var(--i, 0) * 40ms + 120ms);
+  }
+  .polaroid:hover {
+    transform: rotate(calc(var(--tilt, 0deg) * 0.2)) translateY(-4px);
+  }
+
+  @keyframes polaroidDrop {
+    0%   { opacity: 0; transform: rotate(calc(var(--tilt, 0deg) * 0.6)) translateY(12px); }
+    100% { opacity: 1; transform: rotate(calc(var(--tilt, 0deg) * 0.6)) translateY(0); }
+  }
+
+  /* --- Lightbox: bigger touch targets --- */
+  .lightbox-stage {
+    width: 94vw;
+    height: 80vh;
+  }
+  .lightbox-close {
+    width: 44px;
+    height: 44px;
+    top: 12px;
+    right: 12px;
+  }
+  .lightbox-nav {
+    width: 44px;
+    height: 44px;
+  }
+  .lightbox-counter {
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    gap: 10px;
+  }
+  .lightbox-counter .bar { width: 80px; }
+}
+
+
+/* =========================================================
+   Small phone: ≤ 420
+   Hide the archway entirely. Chamber becomes a dim warm wall.
+   ========================================================= */
+@media (max-width: 420px) {
+  .chamber-svg [data-layer="sky"],
+  .chamber-svg [data-layer="arch"],
+  .chamber-svg [data-layer="lanterns"] {
+    display: none;
+  }
+
+  /* Photography stage claims more of the viewport */
+  .polaroid-stage {
+    top: 72px;
+  }
+
+  /* Single column everything */
+  .alcove-row { grid-template-columns: 1fr; gap: 14px; }
+  .alcove     { aspect-ratio: 16 / 9; }
+  .alcove-glyph-wrap { top: 18%; width: 32%; }
+
+  .polaroid { width: min(82vw, 260px); }
+  .polaroid-track { gap: 22px; padding: 22px 12px; }
+}
+
+
+/* =========================================================
+   Landscape phones (short viewport)
+   Keep horizontal cords; just shorten the rows.
+   ========================================================= */
+@media (max-height: 500px) and (orientation: landscape) {
+  .polaroid-line { height: 60vh; max-height: 180px; }
+  .polaroid { width: clamp(100px, 13vw, 140px); }
+}
+
+
+/* =========================================================
+   Touch target bumps — any coarse pointer device
+   ========================================================= */
+@media (pointer: coarse) {
+  .lightbox-nav,
+  .lightbox-close,
+  .room-back {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .polaroid { -webkit-tap-highlight-color: transparent; }
+  .portal,
+  .doorway-exit { -webkit-tap-highlight-color: transparent; }
+}
+
+
+/* =========================================================
+   Reduced motion — stop decorative animation
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .mote,
+  .chamber-svg [data-layer="sky"] *,
+  .chamber-svg [data-layer="lanterns"] *,
+  [class*="icon-"] *,
+  .icon-clock .hand-min,
+  .icon-clock .hand-hour {
+    animation: none !important;
+  }
+
+  .polaroid {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .lightbox,
+  .lightbox-stage,
+  .lightbox-close,
+  .lightbox-nav {
+    transition: opacity 0.2s linear !important;
+  }
+  .lightbox.open .lightbox-stage { transform: none !important; }
+
+  .alcove:hover,
+  .polaroid:hover {
+    transform: none !important;
+  }
+}

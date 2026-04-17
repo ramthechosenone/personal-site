@@ -214,6 +214,16 @@
 .portal {
   cursor: pointer;
   transition: filter .4s var(--ease);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.portal:focus { outline: none; }
+.portal:focus-visible {
+  outline: 1px solid oklch(0.92 0.12 65 / 0.5);
+  outline-offset: 4px;
+  border-radius: 8px;
 }
 .portal .arch-fill { transition: fill .5s var(--ease); }
 .portal .arch-light {
@@ -825,7 +835,13 @@
 }
 
 /* Clickable doorway — arch opening invites return to the field */
-.doorway-exit { cursor: pointer; outline: none; }
+.doorway-exit {
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
 .doorway-exit:focus-visible .doorway-tint { opacity: 0.18; }
 .doorway-exit:hover .doorway-tint {
   opacity: 0.12;

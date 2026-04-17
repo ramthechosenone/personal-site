@@ -21,6 +21,9 @@ const config: Config = {
       backgroundImage: {
         "gradient-radial": "radial-gradient(circle, var(--tw-gradient-stops))",
       },
+      fontFamily: {
+        serif: ["Fraunces", "Georgia", "serif"],
+      },
     },
   },
   plugins: [],

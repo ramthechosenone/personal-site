@@ -2,6 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   Dusk scene design tokens (ported from design handoff)
+   ============================================================ */
+:root {
+  /* Sky */
+  --sky-top:    oklch(0.78 0.11 45);
+  --sky-mid:    oklch(0.70 0.10 20);
+  --sky-low:    oklch(0.60 0.09 310);
+  --sky-hzn:    oklch(0.82 0.09 60);
+
+  /* Land */
+  --hill-far:   oklch(0.55 0.06 260);
+  --hill-mid:   oklch(0.50 0.07 200);
+  --hill-near:  oklch(0.52 0.09 170);
+  --grass-near: oklch(0.48 0.11 160);
+  --grass-front:oklch(0.42 0.10 155);
+  --cypress:    oklch(0.32 0.05 190);
+
+  /* Objects */
+  --stone:      oklch(0.62 0.025 60);
+  --stone-shd:  oklch(0.36 0.03 40);
+  --orb-core:   oklch(0.78 0.06 320);
+  --orb-rim:    oklch(0.72 0.14 40);
+  --glow-warm:  oklch(0.86 0.18 70);
+  --glow-amber: oklch(0.80 0.16 55);
+  --glow-core:  oklch(0.96 0.12 70);
+  --glow-cool:  oklch(0.78 0.14 280);
+
+  /* Chamber stone (used by chamber/alcove pages) */
+  --chamber-lit:   oklch(0.56 0.06 55);
+  --chamber-mid:   oklch(0.42 0.05 45);
+  --chamber-shd:   oklch(0.26 0.04 40);
+  --chamber-floor: oklch(0.34 0.05 50);
+
+  /* Ink */
+  --ink:        oklch(0.22 0.04 20);
+  --ink-soft:   oklch(0.35 0.03 20);
+  --paper:      oklch(0.96 0.01 70);
+
+  --ease: cubic-bezier(.2,.7,.1,1);
+}
+
 @layer base {
   body {
     @apply bg-background text-text-primary;
@@ -9,3 +51,1190 @@
   }
 }
 
+/* ============================================================
+   Dusk backdrop (used behind subpages — no arches, no orb)
+   ============================================================ */
+.dusk-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  background: linear-gradient(
+    to bottom,
+    var(--sky-top) 0%,
+    var(--sky-mid) 28%,
+    var(--sky-hzn) 48%,
+    var(--sky-low) 62%
+  );
+}
+
+.page-panel {
+  position: relative;
+  max-width: 960px;
+  margin: clamp(32px, 5vw, 72px) auto;
+  padding: clamp(28px, 4vw, 56px) clamp(20px, 3vw, 48px);
+  background: oklch(0.96 0.01 70 / 0.82);
+  backdrop-filter: blur(10px) saturate(1.05);
+  -webkit-backdrop-filter: blur(10px) saturate(1.05);
+  border: 1px solid oklch(0.22 0.04 20 / 0.08);
+  border-radius: 14px;
+  box-shadow: 0 20px 60px -20px oklch(0.22 0.04 20 / 0.25),
+              0 2px 6px oklch(0.22 0.04 20 / 0.08);
+  color: var(--ink);
+}
+
+/* ============================================================
+   Dusk landing — stage, chrome, portals, overlays
+   ============================================================ */
+.stage {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  cursor: default;
+  background: linear-gradient(
+    to bottom,
+    var(--sky-top) 0%,
+    var(--sky-mid) 28%,
+    var(--sky-hzn) 48%,
+    var(--sky-low) 62%
+  );
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+.scene-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+.scene-svg .portal {
+  pointer-events: auto;
+}
+
+/* Chrome layer */
+.chrome {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 40;
+}
+.chrome > * { pointer-events: auto; }
+
+.name-tag {
+  position: absolute;
+  top: clamp(18px, 3vw, 34px);
+  left: clamp(18px, 3vw, 34px);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.name-tag .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--orb-rim);
+  box-shadow: 0 0 10px var(--glow-warm);
+  animation: pulse 2.4s var(--ease) infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 0.55; transform: scale(1); }
+  50%     { opacity: 1;    transform: scale(1.25); }
+}
+
+.corner-nav {
+  position: absolute;
+  top: clamp(18px, 3vw, 34px);
+  right: clamp(18px, 3vw, 34px);
+  display: flex;
+  gap: 22px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--ink);
+}
+.corner-nav a {
+  color: inherit;
+  text-decoration: none;
+  position: relative;
+  transition: color .3s var(--ease);
+}
+.corner-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -5px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .35s var(--ease);
+}
+.corner-nav a:hover { color: var(--orb-rim); }
+.corner-nav a:hover::after { transform: scaleX(1); }
+
+.footer-strip {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: clamp(14px, 2.2vw, 22px) clamp(18px, 3vw, 34px);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--ink-soft);
+  mix-blend-mode: multiply;
+}
+.footer-strip .meta { display: flex; gap: 18px; }
+
+.hint {
+  position: absolute;
+  right: clamp(20px, 3vw, 34px);
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: right center;
+  font-size: 10px;
+  letter-spacing: 0.36em;
+  color: var(--ink);
+  opacity: 0.5;
+  white-space: nowrap;
+  animation: riseHint 4s var(--ease) infinite;
+}
+@keyframes riseHint {
+  0%,100% { opacity: .45; }
+  50%     { opacity: .9; }
+}
+
+/* Portal (arch) hover/active states — class toggled via JS */
+.portal {
+  cursor: pointer;
+  transition: filter .4s var(--ease);
+}
+.portal .arch-fill { transition: fill .5s var(--ease); }
+.portal .arch-light {
+  opacity: 0;
+  transition: opacity .5s var(--ease);
+  pointer-events: none;
+}
+.portal:hover .arch-light,
+.portal.active .arch-light,
+.portal.is-hover .arch-light { opacity: 1; }
+.portal:hover, .portal.is-hover {
+  filter: drop-shadow(0 0 30px color-mix(in oklch, var(--glow-warm) 70%, transparent));
+}
+
+.portal-float-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.42em;
+  fill: oklch(0.94 0.05 65 / 0.85);
+  text-anchor: middle;
+  transition: letter-spacing .4s var(--ease), fill .4s var(--ease), opacity .4s var(--ease);
+  opacity: 0.8;
+  paint-order: stroke;
+  stroke: oklch(0.20 0.03 280 / 0.6);
+  stroke-width: 3;
+}
+.portal:hover .portal-float-label,
+.portal.active .portal-float-label,
+.portal.is-hover .portal-float-label {
+  letter-spacing: 0.54em;
+  fill: oklch(0.96 0.12 70);
+  opacity: 1;
+}
+
+/* Dust motes */
+.mote {
+  position: absolute;
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: var(--glow-warm);
+  box-shadow: 0 0 8px var(--glow-warm);
+  opacity: 0.5;
+  pointer-events: none;
+  animation: drift linear infinite;
+}
+@keyframes drift {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  15%  { opacity: 0.7; }
+  100% { transform: translate3d(var(--dx, 40px), var(--dy, -120px), 0); opacity: 0; }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50%      { opacity: 1; }
+}
+
+/* Section overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, var(--paper) 0%, oklch(0.92 0.02 55) 100%);
+  color: var(--ink);
+  z-index: 60;
+  transform: translateY(100%);
+  transition: transform .9s var(--ease);
+  overflow: auto;
+  visibility: hidden;
+}
+.overlay.open {
+  transform: translateY(0);
+  visibility: visible;
+}
+.overlay-inner {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: clamp(40px, 7vw, 96px) clamp(24px, 5vw, 64px);
+  position: relative;
+}
+.overlay h1 {
+  font-family: "Fraunces", Georgia, serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(44px, 7vw, 92px);
+  line-height: 1;
+  margin: 0 0 8px;
+  letter-spacing: -0.02em;
+}
+.overlay .eyebrow {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.overlay p {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(17px, 1.6vw, 21px);
+  line-height: 1.55;
+  max-width: 58ch;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+.overlay .close {
+  position: absolute;
+  top: clamp(20px, 3vw, 36px);
+  right: clamp(20px, 3vw, 36px);
+  background: transparent;
+  border: 1px solid currentColor;
+  color: var(--ink);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  padding: 10px 14px;
+  cursor: pointer;
+  border-radius: 999px;
+  transition: all .3s var(--ease);
+}
+.overlay .close:hover { background: var(--ink); color: var(--paper); }
+
+.index {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin-top: clamp(40px, 6vw, 72px);
+  border-top: 1px solid oklch(0.22 0.04 20 / 0.15);
+}
+.index a,
+.index .row {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  gap: 18px;
+  align-items: baseline;
+  padding: 22px 0;
+  border-bottom: 1px solid oklch(0.22 0.04 20 / 0.15);
+  color: inherit;
+  text-decoration: none;
+  transition: padding-left .35s var(--ease), color .35s var(--ease);
+}
+.index a:hover {
+  padding-left: 14px;
+  color: var(--orb-rim);
+}
+.index .num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--ink-soft);
+  letter-spacing: 0.1em;
+}
+.index .title {
+  font-family: "Fraunces", Georgia, serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(22px, 2.6vw, 32px);
+}
+.index .year {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--ink-soft);
+  letter-spacing: 0.1em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mote, .name-tag .dot, .hint,
+  .portal, .portal .arch-fill, .portal .arch-light {
+    animation: none !important;
+    transition-duration: 0.1ms !important;
+  }
+}
+
+/* ============================================================
+   Chamber page — "inside the arch"
+   Stage + chamber SVG + alcoves + back-door
+   ============================================================ */
+.chamber-stage {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  /* scope ink + accent tokens to chamber so light-background pages aren't affected */
+  --ink:       oklch(0.94 0.04 60);
+  --ink-soft:  oklch(0.80 0.05 55 / 0.8);
+  --ink-dim:   oklch(0.70 0.04 50 / 0.55);
+
+  --accent-photography:         oklch(0.82 0.14 42);
+  --accent-photography-tint-hi: oklch(0.48 0.14 35 / 0.45);
+  --accent-photography-tint-lo: oklch(0.22 0.08 30 / 0.85);
+  --accent-photography-halo:    oklch(0.85 0.17 45 / 0.40);
+
+  --accent-reflections:         oklch(0.90 0.08 78);
+  --accent-reflections-tint-hi: oklch(0.68 0.08 75 / 0.38);
+  --accent-reflections-tint-lo: oklch(0.24 0.04 60 / 0.88);
+  --accent-reflections-halo:    oklch(0.92 0.11 72 / 0.42);
+
+  --accent-play:         oklch(0.80 0.10 155);
+  --accent-play-tint-hi: oklch(0.52 0.09 160 / 0.38);
+  --accent-play-tint-lo: oklch(0.22 0.05 170 / 0.88);
+  --accent-play-halo:    oklch(0.82 0.14 155 / 0.36);
+
+  --accent-now:         oklch(0.78 0.09 240);
+  --accent-now-tint-hi: oklch(0.48 0.09 255 / 0.42);
+  --accent-now-tint-lo: oklch(0.20 0.05 260 / 0.90);
+  --accent-now-halo:    oklch(0.78 0.14 245 / 0.38);
+
+  /* Work chamber accents */
+  --accent-experience:         oklch(0.82 0.12 75);
+  --accent-experience-tint-hi: oklch(0.50 0.10 68 / 0.42);
+  --accent-experience-tint-lo: oklch(0.22 0.06 60 / 0.88);
+  --accent-experience-halo:    oklch(0.84 0.14 72 / 0.40);
+
+  --accent-skills:         oklch(0.80 0.09 220);
+  --accent-skills-tint-hi: oklch(0.50 0.09 225 / 0.40);
+  --accent-skills-tint-lo: oklch(0.22 0.05 230 / 0.88);
+  --accent-skills-halo:    oklch(0.82 0.13 220 / 0.38);
+
+  --accent-cases:         oklch(0.82 0.08 270);
+  --accent-cases-tint-hi: oklch(0.50 0.10 278 / 0.42);
+  --accent-cases-tint-lo: oklch(0.22 0.06 280 / 0.88);
+  --accent-cases-halo:    oklch(0.82 0.13 270 / 0.38);
+
+  --accent-deep:         oklch(0.80 0.10 190);
+  --accent-deep-tint-hi: oklch(0.50 0.09 192 / 0.40);
+  --accent-deep-tint-lo: oklch(0.20 0.05 195 / 0.90);
+  --accent-deep-halo:    oklch(0.82 0.14 190 / 0.38);
+
+  --accent-side:         oklch(0.82 0.10 135);
+  --accent-side-tint-hi: oklch(0.52 0.09 140 / 0.40);
+  --accent-side-tint-lo: oklch(0.22 0.05 145 / 0.88);
+  --accent-side-halo:    oklch(0.84 0.13 135 / 0.38);
+
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 48%,
+    var(--chamber-mid) 0%,
+    var(--chamber-shd) 55%,
+    oklch(0.14 0.03 35) 100%
+  );
+  color: var(--ink);
+  font-family: "Ibarra Real Nova", Georgia, serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+.chamber-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Chamber chrome (breadcrumb layer over the SVG) */
+.chamber-stage .chrome .name-tag,
+.chamber-stage .chrome .corner-nav,
+.chamber-stage .chrome .footer-strip {
+  color: var(--ink);
+}
+.chamber-stage .chrome .footer-strip { color: var(--ink-dim); mix-blend-mode: normal; }
+.chamber-stage .chrome .corner-nav a:hover { color: var(--glow-warm); }
+
+.breadcrumb {
+  position: absolute;
+  top: clamp(18px, 3vw, 34px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  pointer-events: auto;
+}
+.breadcrumb a {
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity .3s var(--ease);
+}
+.breadcrumb a:hover { opacity: 1; }
+.breadcrumb .sep { opacity: 0.4; }
+
+/* Back-through-arch button */
+.back-door {
+  position: absolute;
+  top: clamp(74px, 11vh, 120px);
+  left: clamp(28px, 3vw, 48px);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--ink);
+  text-decoration: none;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity .35s var(--ease), transform .35s var(--ease);
+  background: transparent;
+  border: 0;
+  z-index: 50;
+}
+.back-door:hover {
+  opacity: 1;
+  transform: translateX(-4px);
+}
+.back-door .arrow-box {
+  width: 38px; height: 38px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: oklch(0.20 0.03 40 / 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Chamber heading */
+.chamber-header {
+  position: absolute;
+  top: clamp(74px, 11vh, 120px);
+  left: clamp(108px, 10vw, 150px);
+  max-width: min(310px, 26vw);
+  z-index: 35;
+  pointer-events: none;
+}
+.chamber-eyebrow {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--glow-warm);
+  opacity: 0.85;
+  margin-bottom: 14px;
+}
+.chamber-title {
+  font-family: "Fraunces", "Ibarra Real Nova", Georgia, serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(26px, 3vw, 38px);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+  color: var(--ink);
+}
+.chamber-sub {
+  font-family: "Ibarra Real Nova", Georgia, serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(13px, 1.05vw, 15px);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 40ch;
+  margin: 0;
+}
+
+/* Alcove row */
+.alcove-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 20;
+  pointer-events: none;
+}
+.alcove-row {
+  display: grid;
+  grid-template-columns: repeat(var(--alcove-cols, 4), 1fr);
+  gap: clamp(14px, 1.6vw, 24px);
+  padding: 0 clamp(32px, 5vw, 80px);
+  width: min(1360px, 94vw);
+  pointer-events: auto;
+  margin-top: clamp(40px, 6vh, 80px);
+}
+.alcove {
+  position: relative;
+  aspect-ratio: 3 / 4.6;
+  max-height: 60vh;
+  cursor: pointer;
+  color: var(--ink);
+  text-decoration: none;
+  transition: transform .5s var(--ease);
+}
+.alcove:hover { transform: translateY(-6px); }
+
+.alcove-frame {
+  position: absolute;
+  inset: 0;
+  border-radius: 120px 120px 14px 14px;
+  background:
+    radial-gradient(
+      ellipse 120% 80% at 50% 20%,
+      oklch(0.96 0.12 70 / 0.55) 0%,
+      oklch(0.86 0.16 55 / 0.32) 25%,
+      oklch(0.52 0.10 45 / 0.2) 55%,
+      oklch(0.20 0.03 35 / 0.95) 90%
+    ),
+    linear-gradient(180deg, oklch(0.24 0.04 40) 0%, oklch(0.14 0.03 35) 100%);
+  box-shadow:
+    inset 0 0 0 1px oklch(0.18 0.03 40),
+    inset 0 30px 80px oklch(0.92 0.12 60 / 0.18),
+    inset 0 -40px 80px oklch(0 0 0 / 0.4),
+    0 0 0 6px oklch(0.30 0.05 50),
+    0 0 0 7px oklch(0.44 0.05 50),
+    0 30px 60px oklch(0 0 0 / 0.5);
+  overflow: hidden;
+  transition: box-shadow .5s var(--ease);
+}
+.alcove:hover .alcove-frame {
+  box-shadow:
+    inset 0 0 0 1px oklch(0.18 0.03 40),
+    inset 0 30px 80px oklch(0.96 0.14 65 / 0.36),
+    inset 0 -40px 80px oklch(0 0 0 / 0.4),
+    0 0 0 6px oklch(0.36 0.06 55),
+    0 0 0 7px oklch(0.52 0.07 55),
+    0 30px 60px oklch(0 0 0 / 0.5),
+    0 0 60px oklch(0.88 0.16 60 / 0.3);
+}
+
+.alcove-inner {
+  position: absolute;
+  inset: 18px;
+  border-radius: 110px 110px 6px 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 22px 20px 20px;
+  background:
+    linear-gradient(180deg,
+      var(--tint-hi, oklch(0.55 0.11 50 / 0.3)) 0%,
+      oklch(0.30 0.06 45 / 0.55) 55%,
+      var(--tint-lo, oklch(0.18 0.04 40 / 0.85)) 100%
+    );
+}
+.alcove-glow {
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 60%;
+  background: radial-gradient(ellipse 60% 60% at 50% 50%,
+    var(--halo, oklch(0.92 0.14 60 / 0.4)) 0%,
+    transparent 70%);
+  pointer-events: none;
+  opacity: 0.85;
+  transition: opacity .5s var(--ease);
+}
+.alcove:hover .alcove-glow { opacity: 1; }
+
+.alcove-glyph-wrap {
+  position: absolute;
+  top: 26%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 56%;
+  color: var(--accent, oklch(0.94 0.12 65));
+}
+.alcove-glyph {
+  width: 100%;
+  height: auto;
+  opacity: 0.92;
+  transition: transform .6s var(--ease), opacity .5s var(--ease), filter .5s var(--ease);
+  filter: drop-shadow(0 4px 20px var(--halo, oklch(0.92 0.14 60 / 0.5)));
+}
+.alcove:hover .alcove-glyph {
+  transform: scale(1.05);
+  opacity: 1;
+}
+
+.alcove-title {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-weight: 400;
+  font-size: clamp(14px, 1.2vw, 16px);
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+  margin: 0;
+  color: var(--ink);
+}
+.alcove-kicker {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  color: var(--ink-soft);
+  margin-top: 10px;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+/* Etched icons — dashed engraved feel */
+.etched-icon {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+.etched-icon * { transition: transform .5s var(--ease); }
+
+.etched-icon .blink {
+  animation: iconBlink 3.2s var(--ease) infinite;
+}
+@keyframes iconBlink {
+  0%, 92%, 100% { opacity: 0.2; }
+  94%, 98%      { opacity: 1;   }
+}
+
+.alcove:hover .icon-camera .shutter {
+  animation: shutterSpin 1.6s var(--ease);
+}
+@keyframes shutterSpin {
+  0%   { transform: rotate(0deg)   scale(1);    }
+  40%  { transform: rotate(50deg)  scale(0.92); }
+  55%  { transform: rotate(50deg)  scale(1.02); }
+  100% { transform: rotate(360deg) scale(1);    }
+}
+
+.icon-book .page-right { transition: transform .7s var(--ease); }
+.alcove:hover .icon-book .page-right {
+  transform: rotateY(-42deg);
+  transform-origin: 50px 40px;
+}
+
+.icon-figure .head,
+.icon-figure .arm-l,
+.icon-figure .arm-r {
+  transition: transform .9s var(--ease);
+}
+.icon-figure .head {
+  animation: figureBreathe 3.6s ease-in-out infinite;
+  transform-origin: 50px 18px;
+}
+@keyframes figureBreathe {
+  0%,100% { transform: translateY(0) scale(1); }
+  50%     { transform: translateY(-1px) scale(1.04); }
+}
+.alcove:hover .icon-figure .arm-l { transform: rotate(-22deg); }
+.alcove:hover .icon-figure .arm-r { transform: rotate(22deg); }
+
+.icon-clock .hand-min  { animation: clockMin  60s linear infinite; }
+.icon-clock .hand-hour { animation: clockHour 720s linear infinite; }
+.alcove:hover .icon-clock .hand-min  { animation: clockMinFast  6s linear infinite; }
+.alcove:hover .icon-clock .hand-hour { animation: clockHourFast 72s linear infinite; }
+@keyframes clockMin      { to { transform: rotate(360deg); } }
+@keyframes clockHour     { to { transform: rotate(360deg); } }
+@keyframes clockMinFast  { to { transform: rotate(360deg); } }
+@keyframes clockHourFast { to { transform: rotate(360deg); } }
+
+/* Work icon hover states */
+.icon-briefcase .handle { transition: transform .5s var(--ease); }
+.alcove:hover .icon-briefcase .handle { transform: translateY(-2px) scaleY(1.1); }
+
+.icon-tools .wrench     { transition: transform .6s var(--ease); }
+.icon-tools .screwdriver{ transition: transform .6s var(--ease); }
+.alcove:hover .icon-tools .wrench      { transform: rotate(-12deg); }
+.alcove:hover .icon-tools .screwdriver { transform: rotate(10deg); }
+
+.icon-scroll .scroll-left, .icon-scroll .scroll-right { transition: transform .6s var(--ease); }
+.alcove:hover .icon-scroll .scroll-left  { transform: translateX(-3px); }
+.alcove:hover .icon-scroll .scroll-right { transform: translateX(3px); }
+
+.icon-lens .lens-ripple { animation: lensPulse 3.2s ease-in-out infinite; }
+.alcove:hover .icon-lens .lens-ripple { animation: lensPulse 1.4s ease-in-out infinite; }
+@keyframes lensPulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50%      { transform: scale(1.18); opacity: 1; }
+}
+
+.icon-plane .plane-body { transition: transform .6s var(--ease); }
+.alcove:hover .icon-plane .plane-body { transform: translate(4px, -3px) rotate(-4deg); }
+
+/* Portal enter transition (landing → subpage) — gentle forward drift, warm veil */
+.stage.zooming .scene-svg {
+  transition: transform 900ms cubic-bezier(.4,.0,.2,1), opacity 700ms ease-out 200ms;
+  transform-origin: var(--zoom-x, 50%) var(--zoom-y, 50%);
+  transform: scale(1.28);
+  opacity: 0;
+}
+.stage.zooming .chrome {
+  opacity: 0;
+  transition: opacity 400ms ease-out;
+  pointer-events: none;
+}
+.portal-warm-veil {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 55% 48% at var(--zoom-x, 50%) var(--zoom-y, 50%),
+    oklch(0.96 0.14 65 / 0.85) 0%,
+    oklch(0.82 0.12 55 / 0.45) 45%,
+    oklch(0.32 0.05 45 / 0) 85%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 50;
+  transition: opacity 900ms cubic-bezier(.4,.0,.2,1);
+}
+.stage.zooming .portal-warm-veil { opacity: 1; }
+
+/* Chamber entry fade (target page) */
+.chamber-enter {
+  animation: chamberEnter 900ms var(--ease) both;
+}
+@keyframes chamberEnter {
+  0%   { opacity: 0; filter: brightness(1.35) saturate(1.08); }
+  60%  { opacity: 1; }
+  100% { opacity: 1; filter: brightness(1) saturate(1); }
+}
+
+/* Clickable doorway — arch opening invites return to the field */
+.doorway-exit { cursor: pointer; outline: none; }
+.doorway-exit:focus-visible .doorway-tint { opacity: 0.18; }
+.doorway-exit:hover .doorway-tint {
+  opacity: 0.12;
+  transition: opacity 450ms ease-out;
+}
+.doorway-tint {
+  transition: opacity 700ms ease-out;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* Chamber exit transition (subpage → landing) */
+.chamber-stage.exiting .chamber-svg {
+  transition: transform 750ms cubic-bezier(.4,.0,.2,1), opacity 600ms ease-out 100ms;
+  transform-origin: 50% 52%;
+  transform: scale(1.32);
+  opacity: 0;
+}
+.chamber-stage.exiting .chrome,
+.chamber-stage.exiting .alcove-grid,
+.chamber-stage.exiting .back-door,
+.chamber-stage.exiting .mote {
+  opacity: 0;
+  transition: opacity 350ms ease-out;
+  pointer-events: none;
+}
+.chamber-warm-veil {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 55% 48% at 50% 52%,
+    oklch(0.96 0.14 65 / 0.85) 0%,
+    oklch(0.82 0.12 55 / 0.45) 45%,
+    oklch(0.32 0.05 45 / 0) 85%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 50;
+  transition: opacity 750ms cubic-bezier(.4,.0,.2,1);
+}
+.chamber-stage.exiting .chamber-warm-veil { opacity: 1; }
+
+/* ============================================================
+   Photography — gallery room inside the chamber
+   Polaroid cords + lightbox. Chamber shell reused.
+   ============================================================ */
+
+.chamber-room { overflow: hidden; }
+
+.gallery-title-mono {
+  position: absolute;
+  top: clamp(22px, 3vw, 38px);
+  left: clamp(22px, 3vw, 38px);
+  margin: 0;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-weight: 600;
+  font-size: clamp(13px, 1.1vw, 15px);
+  letter-spacing: 0.32em;
+  line-height: 1;
+  color: var(--ink);
+  text-transform: uppercase;
+  z-index: 45;
+  pointer-events: none;
+  white-space: nowrap;
+  text-shadow: 0 2px 18px oklch(0 0 0 / 0.6);
+}
+
+.room-back {
+  position: absolute;
+  top: calc(clamp(22px, 3vw, 38px) + 28px);
+  left: clamp(22px, 3vw, 38px);
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  background: oklch(0.20 0.03 40 / 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  opacity: 0.7;
+  z-index: 45;
+  transition: opacity .3s var(--ease), transform .3s var(--ease), background .3s var(--ease);
+}
+.room-back:hover {
+  opacity: 1;
+  transform: translateX(-3px);
+  background: oklch(0.28 0.04 45 / 0.55);
+}
+
+/* Polaroid stage — two cords hanging at the bottom */
+.polaroid-stage {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  top: auto; height: auto;
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(22px, 3vh, 40px);
+  padding: 0 0 clamp(30px, 4vh, 60px);
+  pointer-events: none;
+}
+
+.polaroid-line {
+  position: relative;
+  height: clamp(170px, 22vh, 230px);
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  pointer-events: auto;
+}
+.polaroid-line::-webkit-scrollbar { display: none; }
+
+/* edge fade into chamber darkness */
+.polaroid-line::before,
+.polaroid-line::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  width: clamp(40px, 6vw, 90px);
+  z-index: 3;
+  pointer-events: none;
+}
+.polaroid-line::before {
+  left: 0;
+  background: linear-gradient(90deg,
+    oklch(0.14 0.03 35) 0%,
+    oklch(0.14 0.03 35 / 0) 100%);
+}
+.polaroid-line::after {
+  right: 0;
+  background: linear-gradient(-90deg,
+    oklch(0.14 0.03 35) 0%,
+    oklch(0.14 0.03 35 / 0) 100%);
+}
+
+.polaroid-cord {
+  position: absolute;
+  left: 0; right: 0;
+  top: 18px;
+  height: 2px;
+  background: linear-gradient(180deg,
+    oklch(0.58 0.04 45) 0%,
+    oklch(0.38 0.03 40) 50%,
+    oklch(0.22 0.02 40) 100%);
+  border-radius: 2px;
+  box-shadow: 0 2px 3px oklch(0 0 0 / 0.5);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.polaroid-track {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(14px, 1.6vw, 26px);
+  padding: 14px clamp(40px, 5vw, 90px) 0;
+  height: 100%;
+  width: max-content;
+  min-width: 100%;
+  z-index: 2;
+}
+
+.polaroid {
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(120px, 12vw, 160px);
+  aspect-ratio: 4 / 5;
+  scroll-snap-align: center;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transform-origin: 50% 0;
+  transform: rotate(var(--tilt, 0deg));
+  transition: transform 0.6s var(--ease), filter 0.5s var(--ease);
+  opacity: 0;
+  animation: polaroidDrop 0.9s var(--ease) forwards;
+  animation-delay: calc(var(--i, 0) * 120ms + 200ms);
+  filter: drop-shadow(0 16px 20px oklch(0 0 0 / 0.55));
+}
+@keyframes polaroidDrop {
+  0%   { opacity: 0; transform: rotate(var(--tilt, 0deg)) translateY(-60px); }
+  60%  { opacity: 1; transform: rotate(calc(var(--tilt, 0deg) * 1.4)) translateY(6px); }
+  100% { opacity: 1; transform: rotate(var(--tilt, 0deg)) translateY(0); }
+}
+.polaroid:hover {
+  transform: rotate(calc(var(--tilt, 0deg) * 0.3)) translateY(-8px);
+  filter: drop-shadow(0 22px 28px oklch(0 0 0 / 0.6))
+          drop-shadow(0 0 30px oklch(0.88 0.16 60 / 0.35));
+  z-index: 5;
+}
+
+.polaroid-clip {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) translateX(var(--clip-offset, 0px));
+  width: 18px;
+  height: 26px;
+  border-radius: 3px 3px 4px 4px;
+  background: linear-gradient(180deg,
+    oklch(0.72 0.06 60) 0%,
+    oklch(0.58 0.07 55) 45%,
+    oklch(0.42 0.06 50) 100%);
+  box-shadow:
+    inset 0 1px 0 oklch(0.88 0.06 70 / 0.6),
+    inset 0 -2px 3px oklch(0 0 0 / 0.3),
+    0 2px 4px oklch(0 0 0 / 0.5);
+  z-index: 3;
+  pointer-events: none;
+}
+.polaroid-clip::before {
+  content: "";
+  position: absolute;
+  top: 10px; left: 50%;
+  transform: translateX(-50%);
+  width: 14px; height: 2px;
+  background: oklch(0.22 0.02 40);
+  border-radius: 1px;
+}
+.polaroid-clip::after {
+  content: "";
+  position: absolute;
+  top: -4px; left: 50%;
+  transform: translateX(-50%);
+  width: 10px; height: 6px;
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(180deg, oklch(0.78 0.06 60), oklch(0.58 0.07 55));
+}
+
+.polaroid-card {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: linear-gradient(180deg,
+    oklch(0.96 0.02 90) 0%,
+    oklch(0.93 0.02 85) 75%,
+    oklch(0.88 0.03 80) 100%);
+  padding: 8% 8% 22% 8%;
+  border-radius: 2px;
+  box-shadow:
+    inset 0 0 0 1px oklch(0.80 0.03 70 / 0.5),
+    inset 0 -30px 40px oklch(0.72 0.04 65 / 0.08);
+  transition: box-shadow 0.4s var(--ease);
+}
+.polaroid:hover .polaroid-card {
+  box-shadow:
+    inset 0 0 0 1px oklch(0.86 0.04 70 / 0.7),
+    inset 0 -30px 40px oklch(0.72 0.04 65 / 0.08);
+}
+
+.polaroid-window {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  overflow: hidden;
+  background: oklch(0.08 0.01 30);
+  box-shadow:
+    inset 0 0 0 1px oklch(0.20 0.02 40 / 0.3),
+    inset 0 4px 10px oklch(0 0 0 / 0.25);
+}
+.polaroid-window img {
+  filter: saturate(0.88) brightness(0.92) contrast(1.02);
+  transition: filter 0.5s var(--ease);
+}
+.polaroid:hover .polaroid-window img {
+  filter: saturate(1) brightness(1) contrast(1);
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: oklch(0.05 0.01 35 / 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: background 0.6s var(--ease), backdrop-filter 0.6s var(--ease), opacity 0.4s var(--ease);
+}
+.lightbox.open {
+  opacity: 1;
+  pointer-events: auto;
+  background: oklch(0.05 0.01 35 / 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+.lightbox-stage {
+  position: relative;
+  width: 90vw;
+  height: 86vh;
+  display: grid;
+  place-items: center;
+  transform: scale(0.96);
+  transition: transform 0.6s var(--ease);
+}
+.lightbox.open .lightbox-stage { transform: scale(1); }
+.lightbox-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain;
+  box-shadow:
+    0 0 0 1px oklch(0.30 0.04 45 / 0.4),
+    0 40px 80px oklch(0 0 0 / 0.7),
+    0 0 120px oklch(0.88 0.16 60 / 0.15);
+}
+.lightbox-halo {
+  position: absolute;
+  inset: 10%;
+  background: radial-gradient(ellipse 60% 50% at 50% 50%,
+    oklch(0.88 0.16 60 / 0.18) 0%,
+    transparent 70%);
+  z-index: 301;
+  pointer-events: none;
+  filter: blur(40px);
+}
+
+.lightbox-close,
+.lightbox-nav {
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  background: oklch(0.20 0.03 40 / 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 310;
+  transition: transform 0.3s var(--ease), background 0.3s var(--ease), opacity 0.3s var(--ease);
+}
+.lightbox-close {
+  position: fixed;
+  top: clamp(20px, 3vw, 34px);
+  right: clamp(20px, 3vw, 34px);
+  width: 44px; height: 44px;
+}
+.lightbox-close:hover {
+  transform: rotate(90deg);
+  background: oklch(0.28 0.04 45 / 0.6);
+}
+.lightbox-nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px; height: 52px;
+  opacity: 0.7;
+}
+.lightbox-nav:hover { opacity: 1; background: oklch(0.28 0.04 45 / 0.6); }
+.lightbox-nav.prev { left: clamp(20px, 3vw, 48px); }
+.lightbox-nav.next { right: clamp(20px, 3vw, 48px); }
+.lightbox-nav.prev:hover { transform: translateY(-50%) translateX(-4px); }
+.lightbox-nav.next:hover { transform: translateY(-50%) translateX(4px); }
+
+.lightbox-counter {
+  position: fixed;
+  bottom: clamp(20px, 3vw, 34px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  color: oklch(0.72 0.03 80);
+  z-index: 310;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.lightbox-counter .bar {
+  width: 120px;
+  height: 1px;
+  background: oklch(0.60 0.05 50 / 0.3);
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+.lightbox-counter .bar::after {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: var(--progress, 0%);
+  background: var(--glow-warm);
+  transition: width 0.4s var(--ease);
+  box-shadow: 0 0 8px var(--glow-warm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .alcove, .alcove-frame, .alcove-glow, .alcove-glyph,
+  .etched-icon *, .icon-figure .head,
+  .icon-clock .hand-min, .icon-clock .hand-hour,
+  .etched-icon .blink,
+  .stage.zooming .scene-svg, .stage.zooming .portal-warm-veil,
+  .chamber-stage.exiting .chamber-svg, .chamber-warm-veil,
+  .chamber-enter,
+  .polaroid {
+    animation: none !important;
+    transition-duration: 0.1ms !important;
+  }
+  .polaroid { opacity: 1; }
+}

@@ -46,9 +46,9 @@ export default function DeepDives() {
   const router = useRouter();
 
   return (
-    <SiteShell>
+    <SiteShell backdrop>
       <BackButton circular to="/work" />
-      <div className="max-w-3xl mx-auto px-4 pb-16">
+      <div className="page-panel">
         <motion.h1
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}

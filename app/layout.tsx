@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./responsive.css";
-import HomeSphere from "@/components/layout/HomeSphere";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -49,7 +48,6 @@ export default function RootLayout({
       </head>
       <body>
         {children}
-        <HomeSphere />
       </body>
     </html>
   );

@@ -88,6 +88,11 @@ export default function LandingStage() {
 
         <div className="hint">HOVER · ENTER · EXPLORE</div>
 
+        <div className="mobile-portals" aria-label="Navigate">
+          <button type="button" onClick={() => enter("personal")}>PERSONAL</button>
+          <button type="button" onClick={() => enter("work")}>WORK</button>
+        </div>
+
         <div className="footer-strip">
           <div className="meta">
             <span>{time.toUpperCase()}</span>

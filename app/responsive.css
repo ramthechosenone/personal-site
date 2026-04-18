@@ -12,10 +12,6 @@
    ========================================================= */
 
 
-/* Mobile-only portal CTAs — hidden by default, shown at ≤700 */
-.mobile-portals { display: none; }
-
-
 /* =========================================================
    Medium: ≤ 1024
    ========================================================= */
@@ -116,39 +112,6 @@
   }
   .alcove { aspect-ratio: 1 / 1.2; }
 
-  /* --- Landing: show inline portal CTAs (SVG portals are cropped off) --- */
-  .mobile-portals {
-    display: flex;
-    gap: 14px;
-    position: absolute;
-    left: 50%;
-    top: 40%;
-    transform: translateX(-50%);
-    z-index: 30;
-    pointer-events: auto;
-  }
-  .mobile-portals button {
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
-    font-size: 11px;
-    letter-spacing: 0.28em;
-    color: var(--ink);
-    background: oklch(0.22 0.04 45 / 0.5);
-    border: 1px solid oklch(0.62 0.08 55 / 0.45);
-    padding: 12px 22px;
-    border-radius: 999px;
-    cursor: pointer;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    min-height: 44px;
-    box-shadow: 0 0 24px oklch(0.88 0.16 60 / 0.2);
-    -webkit-tap-highlight-color: transparent;
-    transition: background 0.3s var(--ease), transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
-  }
-  .mobile-portals button:active {
-    background: oklch(0.32 0.06 50 / 0.65);
-    transform: translateY(1px);
-    box-shadow: 0 0 36px oklch(0.88 0.16 60 / 0.35);
-  }
 
   /* --- Photography: cords → single vertical scroll --- */
   .polaroid-stage {
@@ -267,9 +230,6 @@
 
   .polaroid { width: min(82vw, 260px); }
   .polaroid-track { gap: 22px; padding: 22px 12px; }
-
-  .mobile-portals { gap: 10px; top: 36%; }
-  .mobile-portals button { padding: 10px 16px; font-size: 10px; letter-spacing: 0.22em; }
 }
 
 

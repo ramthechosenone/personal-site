@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import DuskScene from "./DuskScene";
+import MobileHome, { useIsMobile } from "./MobileHome";
 
 type Target = "personal" | "work";
 
@@ -16,6 +17,7 @@ const ZOOM_DURATION_MS = 750;
 export default function LandingStage() {
   const router = useRouter();
   const stageRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile(720);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [zooming, setZooming] = useState<Target | null>(null);
   const [time, setTime] = useState<string>(() =>
@@ -69,40 +71,47 @@ export default function LandingStage() {
       <DuskScene
         activePortal={zooming}
         onEnter={enter}
+        showPortals={!isMobile}
         reducedMotion={reducedMotion}
       />
 
       <div className="portal-warm-veil" aria-hidden="true" />
 
-      <div className="chrome">
-        <div className="name-tag">
-          <span className="dot" />
-          <span>SRIRAM DEVARAPU</span>
-          <span style={{ opacity: 0.4, margin: "0 6px" }}>/</span>
-          <span style={{ opacity: 0.7 }}>Software engineer. Quiet maker.</span>
-        </div>
-
-        <nav className="corner-nav">
-          <a href="mailto:srirampdevarapu@gmail.com">CONTACT</a>
-        </nav>
-
-        <div className="hint">HOVER · ENTER · EXPLORE</div>
-
-        <div className="mobile-portals" aria-label="Navigate">
-          <button type="button" onClick={() => enter("personal")}>PERSONAL</button>
-          <button type="button" onClick={() => enter("work")}>WORK</button>
-        </div>
-
-        <div className="footer-strip">
-          <div className="meta">
-            <span>{time.toUpperCase()}</span>
-            <span>SF · CA</span>
+      {isMobile ? (
+        <MobileHome
+          name="Sriram Devarapu"
+          tagline="Software engineer. Quiet maker."
+          time={time}
+          location="SF · CA"
+          onEnter={enter}
+          contactHref="mailto:srirampdevarapu@gmail.com"
+        />
+      ) : (
+        <div className="chrome">
+          <div className="name-tag">
+            <span className="dot" />
+            <span>SRIRAM DEVARAPU</span>
+            <span style={{ opacity: 0.4, margin: "0 6px" }}>/</span>
+            <span style={{ opacity: 0.7 }}>Software engineer. Quiet maker.</span>
           </div>
-          <div className="meta">
-            <span>PORTFOLIO / v2026</span>
+
+          <nav className="corner-nav">
+            <a href="mailto:srirampdevarapu@gmail.com">CONTACT</a>
+          </nav>
+
+          <div className="hint">HOVER · ENTER · EXPLORE</div>
+
+          <div className="footer-strip">
+            <div className="meta">
+              <span>{time.toUpperCase()}</span>
+              <span>SF · CA</span>
+            </div>
+            <div className="meta">
+              <span>PORTFOLIO / v2026</span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

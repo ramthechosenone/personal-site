@@ -1,0 +1,191 @@
+/* ============================================================
+   mobile-home.css
+   Mobile landing layer (≤ 720px) — pairs with MobileHome.tsx.
+   Scoped with `.mobile-home` and `.m-*` prefixes.
+   ============================================================ */
+
+.mobile-home {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  padding: clamp(18px, 6vw, 28px) clamp(18px, 5vw, 26px)
+           clamp(24px, 8vw, 40px);
+  pointer-events: none;
+  z-index: 45;
+  color: oklch(0.22 0.03 40);
+  gap: 0;
+}
+.mobile-home > * { pointer-events: auto; }
+
+/* ------------ Top bar ------------ */
+.m-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  font-weight: 500;
+}
+.m-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: oklch(0.20 0.03 40 / 0.85);
+}
+.m-name .dot {
+  width: 6px; height: 6px; border-radius: 99px;
+  background: oklch(0.72 0.14 40);
+  box-shadow: 0 0 8px oklch(0.72 0.16 40 / 0.7);
+}
+.m-contact {
+  color: oklch(0.20 0.03 40 / 0.75);
+  text-decoration: none;
+  letter-spacing: 0.22em;
+  padding: 6px 2px;
+}
+
+/* ------------ Intro (kicker + tagline) ------------ */
+.m-intro {
+  text-align: left;
+  margin-top: clamp(22px, 5vh, 40px);
+  max-width: 88%;
+}
+.m-kicker {
+  display: block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: oklch(0.28 0.03 40 / 0.6);
+  margin-bottom: 14px;
+}
+.m-tagline {
+  margin: 0;
+  font-family: "Fraunces", Georgia, serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(26px, 7.5vw, 36px);
+  line-height: 1.14;
+  letter-spacing: -0.01em;
+  color: oklch(0.18 0.04 30 / 0.92);
+  text-shadow: 0 1px 1px oklch(0.98 0.02 70 / 0.35);
+  text-wrap: balance;
+  max-width: 14ch;
+}
+
+/* ------------ Arch pills ------------ */
+.m-archrow {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: clamp(22px, 4vh, 34px);
+  align-self: start;
+}
+
+.m-arch {
+  position: relative;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid oklch(0.35 0.03 30 / 0.22);
+  background:
+    linear-gradient(
+      135deg,
+      oklch(0.36 0.04 30 / 0.58) 0%,
+      oklch(0.30 0.04 25 / 0.72) 55%,
+      oklch(0.28 0.05 20 / 0.78) 100%
+    );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 26px 26px 22px 22px;
+  padding: 22px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: oklch(0.97 0.03 65 / 0.95);
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 0.02em;
+  box-shadow:
+    0 1px 0 oklch(0.98 0.05 70 / 0.08) inset,
+    0 -1px 0 oklch(0.15 0.04 30 / 0.35) inset,
+    0 8px 24px oklch(0.15 0.04 30 / 0.25);
+  cursor: pointer;
+  transition: transform .3s cubic-bezier(.22,.9,.22,1),
+              box-shadow .4s cubic-bezier(.22,.9,.22,1),
+              background .4s cubic-bezier(.22,.9,.22,1);
+  text-align: left;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.m-arch::before {
+  content: "";
+  position: absolute;
+  inset: 6px 50% 6px 6px;
+  border-radius: 22px 8px 8px 22px;
+  background: radial-gradient(
+    ellipse at 85% 50%,
+    oklch(0.82 0.16 55 / 0.55) 0%,
+    oklch(0.72 0.14 45 / 0.20) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  opacity: 0.75;
+  transition: opacity .4s cubic-bezier(.22,.9,.22,1);
+}
+
+.m-arch:active,
+.m-arch:focus-visible {
+  transform: translateY(1px);
+  outline: none;
+  box-shadow:
+    0 1px 0 oklch(0.98 0.05 70 / 0.12) inset,
+    0 -1px 0 oklch(0.15 0.04 30 / 0.35) inset,
+    0 6px 18px oklch(0.15 0.04 30 / 0.3),
+    0 0 0 3px oklch(0.72 0.14 45 / 0.28);
+}
+
+.m-arch-num {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: oklch(0.92 0.10 65 / 0.72);
+  min-width: 22px;
+}
+.m-arch-label {
+  flex: 1;
+  font-family: "Fraunces", Georgia, serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 22px;
+  letter-spacing: -0.005em;
+  color: oklch(0.98 0.04 65 / 0.97);
+}
+.m-arch-caret {
+  font-size: 18px;
+  color: oklch(0.92 0.10 65 / 0.8);
+  font-weight: 300;
+  transition: transform .3s cubic-bezier(.22,.9,.22,1);
+}
+.m-arch:active .m-arch-caret { transform: translateX(4px); }
+
+/* ------------ Footer meta ------------ */
+.m-footer {
+  display: flex;
+  justify-content: space-between;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.28em;
+  color: oklch(0.22 0.04 30 / 0.6);
+  margin-top: 10px;
+}
+
+/* ------------ Hide landing desktop chrome on mobile ------------
+   Scoped to .stage so chamber-page chrome isn't affected.       */
+@media (max-width: 720px) {
+  .stage > .chrome,
+  .stage > .chrome > *,
+  .stage > .hint,
+  .stage > .footer-strip { display: none; }
+}

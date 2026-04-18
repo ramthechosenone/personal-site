@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import "./mobile-home.css";
 import "./responsive.css";
 
 export const viewport: Viewport = {

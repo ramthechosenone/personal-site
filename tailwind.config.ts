@@ -23,6 +23,7 @@ const config: Config = {
       },
       fontFamily: {
         serif: ["Fraunces", "Georgia", "serif"],
+        mono: ['"IBM Plex Mono"', "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
     },
   },

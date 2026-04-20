@@ -49,6 +49,11 @@ const projects: Project[] = [
       "An iOS app for logging and sharing movie, TV, and anime reviews. Features five-category ratings, customizable review criteria, shareable social media cards, and AI-powered recommendations via a custom SVD engine. Cloud sync with Firebase Firestore, offline-first architecture, and Google/Apple Sign-In.",
     links: [
       {
+        label: "App Store",
+        href: "https://apps.apple.com/us/app/afterthoughts/id6760627706",
+        external: true,
+      },
+      {
         label: "GitHub",
         href: "https://github.com/ramthechosenone",
         external: true,

@@ -80,7 +80,7 @@ export default function LandingStage() {
       {isMobile ? (
         <MobileHome
           name="Sriram Devarapu"
-          tagline="Software engineer. Quiet maker."
+          tagline=""
           time={time}
           location="SF · CA"
           onEnter={enter}
@@ -91,8 +91,6 @@ export default function LandingStage() {
           <div className="name-tag">
             <span className="dot" />
             <span>SRIRAM DEVARAPU</span>
-            <span style={{ opacity: 0.4, margin: "0 6px" }}>/</span>
-            <span style={{ opacity: 0.7 }}>Software engineer. Quiet maker.</span>
           </div>
 
           <nav className="corner-nav">
@@ -101,15 +99,6 @@ export default function LandingStage() {
 
           <div className="hint">HOVER · ENTER · EXPLORE</div>
 
-          <div className="footer-strip">
-            <div className="meta">
-              <span>{time.toUpperCase()}</span>
-              <span>SF · CA</span>
-            </div>
-            <div className="meta">
-              <span>PORTFOLIO / v2026</span>
-            </div>
-          </div>
         </div>
       )}
     </div>

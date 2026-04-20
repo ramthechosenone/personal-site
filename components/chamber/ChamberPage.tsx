@@ -4,6 +4,8 @@ import { CSSProperties, ReactNode, useCallback, useEffect, useState } from "reac
 import { useRouter } from "next/navigation";
 import ChamberScene from "./ChamberScene";
 import { AlcoveGrid, AlcoveSection } from "./AlcoveGrid";
+import { CairnGrid } from "./CairnGrid";
+import { TerminalGrid } from "./TerminalGrid";
 
 const EXIT_DURATION_MS = 750;
 
@@ -23,6 +25,7 @@ type Props = {
   breadcrumb: string;
   sections: AlcoveSection[];
   enterAnimation?: boolean;
+  gridVariant?: "alcove" | "cairn" | "terminal";
   children?: ReactNode;
 };
 
@@ -31,6 +34,7 @@ export default function ChamberPage({
   breadcrumb,
   sections,
   enterAnimation = true,
+  gridVariant = "alcove",
   children,
 }: Props) {
   const router = useRouter();
@@ -152,7 +156,13 @@ export default function ChamberPage({
         </div>
       </div>
 
-      <AlcoveGrid sections={sections} />
+      {gridVariant === "cairn" ? (
+        <CairnGrid sections={sections} />
+      ) : gridVariant === "terminal" ? (
+        <TerminalGrid sections={sections} />
+      ) : (
+        <AlcoveGrid sections={sections} />
+      )}
 
       {children}
 

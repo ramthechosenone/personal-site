@@ -32,9 +32,9 @@ const fadeUp = {
 
 export default function Play() {
   return (
-    <SiteShell>
+    <SiteShell backdrop>
       <BackButton circular to="/personal" />
-      <div className="max-w-3xl mx-auto px-4 pb-16">
+      <div className="page-panel max-w-3xl">
         <motion.h1
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -58,7 +58,7 @@ export default function Play() {
             <p className="text-text-subtle text-sm leading-relaxed">
               Football is where I find flow outside of code. Whether it's a weekend pickup match,
               following Manchester United through the highs and the heartbreak, or grinding
-              through rivals on EAFC — the game teaches you the same things engineering does:
+              through rivals on EAFC, the game teaches you the same things engineering does:
               read the field, make decisions under pressure, and never stop moving forward.
             </p>
           </motion.section>
@@ -70,7 +70,7 @@ export default function Play() {
             </h2>
             <p className="text-text-subtle text-sm leading-relaxed">
               I take my Scion FR-S to the track when I need to think with my hands instead of
-              a keyboard. High performance driving is a lot like debugging production — you need
+              a keyboard. High performance driving is a lot like debugging production. You need
               to stay calm, trust your inputs, and commit to the line. There's no undo button
               at 100 mph.
             </p>
@@ -99,8 +99,7 @@ export default function Play() {
             <p className="text-text-subtle text-sm leading-relaxed">
               Hiking is how I reset. There's something about putting one foot in front of the
               other for hours, gaining elevation with nothing but your own effort, that puts
-              everything else in perspective. The summit is never the point — it's who you
-              become on the way up.
+              everything else in perspective.
             </p>
             {(() => {
               const cols: typeof hikePhotos[] = [[], [], []];

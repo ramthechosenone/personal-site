@@ -44,6 +44,7 @@ export default function Personal() {
       nameTagSuffix="Personal"
       breadcrumb="Personal"
       sections={SECTIONS}
+      gridVariant="cairn"
     />
   );
 }

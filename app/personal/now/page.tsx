@@ -8,7 +8,7 @@ export default function Now() {
   return (
     <SiteShell backdrop>
       <BackButton circular to="/personal" />
-      <div className="page-panel">
+      <div className="page-panel font-mono">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -17,7 +17,7 @@ export default function Now() {
           <div className="text-[10px] tracking-[0.32em] uppercase text-text-subtle mb-3">
             04 — Personal · Now
           </div>
-          <h1 className="font-serif italic font-light text-4xl md:text-5xl leading-tight text-text-primary mb-3">
+          <h1 className="font-mono font-light text-3xl md:text-4xl leading-tight tracking-tight text-text-primary mb-3">
             What&rsquo;s occupying me right now.
           </h1>
           <p className="text-sm text-text-subtle mb-10 max-w-[52ch]">

@@ -717,6 +717,286 @@
   opacity: 0.75;
 }
 
+/* Cairn variant — stacked-stone marks for subpage sections */
+.cairn-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 20;
+  pointer-events: none;
+}
+.cairn-row {
+  display: grid;
+  grid-template-columns: repeat(var(--cairn-cols, 4), 1fr);
+  gap: clamp(24px, 3vw, 56px);
+  padding: 0 clamp(32px, 5vw, 80px);
+  width: min(1360px, 94vw);
+  pointer-events: auto;
+  margin-top: clamp(40px, 6vh, 80px);
+  align-items: end;
+}
+.cairn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform .5s var(--ease);
+  padding: 16px 8px;
+}
+.cairn:hover { transform: translateY(-4px); }
+.cairn-stack {
+  width: clamp(110px, 10vw, 150px);
+  height: auto;
+  filter: drop-shadow(0 12px 28px oklch(0 0 0 / 0.45));
+  transition: filter .5s var(--ease);
+}
+.cairn:hover .cairn-stack {
+  filter: drop-shadow(0 16px 34px oklch(0 0 0 / 0.55));
+}
+.cairn-svg { width: 100%; height: auto; display: block; }
+.cairn-title {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-weight: 400;
+  font-size: clamp(14px, 1.2vw, 16px);
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+  margin: 18px 0 0;
+  color: var(--ink);
+  text-align: center;
+}
+.cairn-kicker {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  color: var(--ink-soft);
+  margin-top: 8px;
+  text-transform: uppercase;
+  opacity: 0.7;
+  text-align: center;
+}
+
+/* Terminal variant — powered-off monitor panes for work subpages */
+.terminal-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 20;
+  pointer-events: none;
+}
+.terminal-row {
+  display: grid;
+  grid-template-columns: repeat(var(--terminal-cols, 5), 1fr);
+  gap: clamp(18px, 2vw, 32px);
+  padding: 0 clamp(32px, 5vw, 80px);
+  width: min(1360px, 94vw);
+  pointer-events: auto;
+  margin-top: clamp(40px, 6vh, 80px);
+  align-items: end;
+}
+.terminal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform .45s var(--ease);
+  padding: 10px 4px 0;
+}
+.terminal:hover { transform: translateY(-4px); }
+
+.terminal-bezel {
+  position: relative;
+  width: clamp(170px, 14vw, 220px);
+  aspect-ratio: 4 / 3.1;
+  background: linear-gradient(180deg,
+    oklch(0.48 0.006 250) 0%,
+    oklch(0.36 0.005 250) 55%,
+    oklch(0.26 0.004 250) 100%);
+  border-radius: 10px 10px 6px 6px;
+  box-shadow:
+    inset 0 0 0 1px oklch(0.56 0.006 250 / 0.5),
+    inset 0 1px 0 oklch(0.66 0.006 250 / 0.35),
+    inset 0 -2px 6px oklch(0.14 0.004 250 / 0.5),
+    0 12px 28px oklch(0 0 0 / 0.5);
+  padding: 14px 12px 6px;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow .45s var(--ease);
+}
+.terminal:hover .terminal-bezel {
+  box-shadow:
+    inset 0 0 0 1px oklch(0.62 0.006 250 / 0.6),
+    inset 0 1px 0 oklch(0.72 0.006 250 / 0.4),
+    inset 0 -2px 6px oklch(0.14 0.004 250 / 0.5),
+    0 16px 34px oklch(0 0 0 / 0.55);
+}
+
+.terminal-dots {
+  position: absolute;
+  top: 6px;
+  left: 10px;
+  display: flex;
+  gap: 4px;
+}
+.td {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: oklch(0.22 0.01 250);
+  box-shadow: inset 0 0 0 0.5px oklch(0.32 0.01 250 / 0.7);
+}
+.td-r { background: oklch(0.28 0.04 25); }
+.td-y { background: oklch(0.30 0.03 80); }
+.td-g { background: oklch(0.28 0.03 150); }
+
+.terminal-screen {
+  position: relative;
+  flex: 1;
+  margin-top: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 120% 90% at 50% 40%,
+      oklch(0.14 0.006 250) 0%,
+      oklch(0.08 0.004 250) 65%,
+      oklch(0.05 0.003 250) 100%);
+  box-shadow:
+    inset 0 0 0 1px oklch(0 0 0 / 0.8),
+    inset 0 0 12px oklch(0 0 0 / 0.6);
+  padding: 8px 9px 6px;
+}
+.terminal:hover .terminal-screen {
+  background:
+    radial-gradient(ellipse 120% 90% at 50% 40%,
+      oklch(0.16 0.015 155) 0%,
+      oklch(0.09 0.01 155) 65%,
+      oklch(0.05 0.005 155) 100%);
+}
+.terminal-screen-glass {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+    oklch(0.25 0.01 250 / 0.12) 0%,
+    transparent 40%);
+  pointer-events: none;
+}
+.terminal-screen-reflection {
+  position: absolute;
+  top: 6%;
+  left: 8%;
+  width: 42%;
+  height: 22%;
+  background: linear-gradient(120deg,
+    oklch(0.6 0.01 250 / 0.08) 0%,
+    transparent 70%);
+  border-radius: 50%;
+  filter: blur(4px);
+  pointer-events: none;
+}
+.terminal-code {
+  position: relative;
+  z-index: 1;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 8.5px;
+  line-height: 1.45;
+  color: oklch(0.36 0.008 250 / 0.45);
+  letter-spacing: 0.01em;
+  transition: color .4s var(--ease);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.terminal-heading {
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: oklch(0.44 0.008 250 / 0.6);
+  margin-bottom: 5px;
+  transition: color .4s var(--ease), text-shadow .4s var(--ease);
+}
+.terminal-line {
+  color: oklch(0.32 0.008 250 / 0.5);
+  opacity: 0.9;
+  transition: color .35s var(--ease), text-shadow .35s var(--ease), opacity .35s var(--ease);
+  transition-delay: 0ms;
+}
+.terminal-cursor {
+  display: inline-block;
+  margin-top: 2px;
+  color: oklch(0.32 0.008 250 / 0.5);
+  transition: color .35s var(--ease), text-shadow .35s var(--ease);
+}
+
+.terminal:hover .terminal-heading {
+  color: oklch(0.88 0.16 150);
+  text-shadow: 0 0 6px oklch(0.82 0.22 150 / 0.7);
+}
+.terminal:hover .terminal-line {
+  color: oklch(0.82 0.18 150);
+  text-shadow: 0 0 4px oklch(0.8 0.22 150 / 0.55);
+  transition-delay: calc(var(--line-i, 0) * 60ms);
+}
+.terminal:hover .terminal-cursor {
+  color: oklch(0.88 0.2 150);
+  text-shadow: 0 0 6px oklch(0.82 0.22 150 / 0.8);
+  animation: terminalBlink 1.1s steps(2) infinite;
+}
+@keyframes terminalBlink {
+  0%, 50%   { opacity: 1; }
+  50.01%, 100% { opacity: 0.25; }
+}
+
+.terminal-foot {
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10px;
+}
+.terminal-led {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: oklch(0.22 0.01 250);
+  box-shadow: inset 0 0 0 0.5px oklch(0.32 0.01 250 / 0.7);
+  transition: background .35s var(--ease), box-shadow .35s var(--ease);
+}
+.terminal:hover .terminal-led {
+  background: oklch(0.80 0.22 150);
+  box-shadow: 0 0 6px oklch(0.82 0.24 150 / 0.9);
+}
+.terminal-stand {
+  display: none;
+}
+.terminal::after {
+  content: "";
+  position: absolute;
+  top: calc(100% - 36px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 38%;
+  height: 4px;
+  background: linear-gradient(180deg,
+    oklch(0.40 0.005 250) 0%,
+    oklch(0.24 0.004 250) 100%);
+  border-radius: 0 0 4px 4px;
+  box-shadow:
+    inset 0 0 0 1px oklch(0.54 0.006 250 / 0.5),
+    0 4px 12px oklch(0 0 0 / 0.45);
+  z-index: -1;
+}
+
+.terminal-title { display: none; }
+
 /* Etched icons — dashed engraved feel */
 .etched-icon {
   width: 100%;
@@ -1116,6 +1396,54 @@
 }
 .polaroid:hover .polaroid-window img {
   filter: saturate(1) brightness(1) contrast(1);
+}
+
+/* Developing-polaroid loader — slow warm fade with drifting film grain */
+.polaroid-loader {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 45%,
+      oklch(0.22 0.015 55) 0%,
+      oklch(0.12 0.012 50) 65%,
+      oklch(0.08 0.01 45) 100%);
+  animation: developingFade 2.6s ease-in-out infinite;
+}
+.polaroid-loader .developing-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      oklch(0.08 0.01 45 / 0.6) 0%,
+      oklch(0.14 0.015 55 / 0) 50%,
+      oklch(0.08 0.01 45 / 0.5) 100%);
+  mix-blend-mode: multiply;
+}
+.polaroid-loader .developing-grain {
+  position: absolute;
+  inset: -20%;
+  background-image:
+    radial-gradient(oklch(1 0 0 / 0.09) 1px, transparent 1px),
+    radial-gradient(oklch(1 0 0 / 0.06) 1px, transparent 1px);
+  background-size: 3px 3px, 5px 5px;
+  background-position: 0 0, 1px 2px;
+  opacity: 0.55;
+  animation: grainDrift 1.4s steps(6) infinite;
+  mix-blend-mode: screen;
+}
+@keyframes developingFade {
+  0%, 100% { filter: brightness(0.85); }
+  50%      { filter: brightness(1.08); }
+}
+@keyframes grainDrift {
+  0%   { transform: translate(0, 0); }
+  20%  { transform: translate(-4px, 3px); }
+  40%  { transform: translate(2px, -3px); }
+  60%  { transform: translate(-3px, -2px); }
+  80%  { transform: translate(3px, 2px); }
+  100% { transform: translate(0, 0); }
 }
 
 /* Lightbox */

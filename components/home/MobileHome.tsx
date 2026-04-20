@@ -65,10 +65,6 @@ export default function MobileHome({
         </button>
       </div>
 
-      <div className="m-footer">
-        <span>{time.toUpperCase()}</span>
-        <span>{location}</span>
-      </div>
     </div>
   );
 }

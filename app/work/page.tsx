@@ -52,6 +52,7 @@ export default function Work() {
       nameTagSuffix="Work"
       breadcrumb="Work"
       sections={SECTIONS}
+      gridVariant="terminal"
     />
   );
 }

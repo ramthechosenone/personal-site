@@ -594,7 +594,7 @@ export default function DuskScene({
           <Cypress x={760} y={592} h={48} opacity={0.8} />
           <Cypress x={1180} y={548} h={62} opacity={0.85} />
           <Cypress x={1460} y={620} h={50} opacity={0.85} />
-          <HillPeacock x={1340} baseY={580} scale={0.75} />
+          <HillPeacock x={1700} baseY={640} scale={0.78} />
         </g>
 
         {/* Foreground water channel (Godavari) */}

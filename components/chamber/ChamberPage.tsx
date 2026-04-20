@@ -137,11 +137,22 @@ export default function ChamberPage({
 
         <button
           type="button"
-          className="chamber-back"
+          className="portal-back"
           onClick={onBack}
           aria-label="Back to home"
         >
-          ← HOME
+          <svg viewBox="0 0 40 52" aria-hidden="true" focusable="false">
+            {/* Tiny archway glyph echoing the home portals */}
+            <path
+              d="M 4 50 L 4 22 A 16 16 0 0 1 36 22 L 36 50"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <circle cx="20" cy="22" r="3" fill="currentColor" opacity="0.55" />
+          </svg>
         </button>
       </div>
 

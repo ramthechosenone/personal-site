@@ -344,7 +344,9 @@ export function GodavariBridge() {
           them, as if passing portal-to-portal. */}
       <defs>
         <clipPath id="bridge-span" clipPathUnits="userSpaceOnUse">
-          <rect x="470" y="600" width="980" height="80" />
+          {/* Portal-to-portal visible window: left portal outer-right ≈484,
+              right portal outer-left ≈1430. Train can only materialize here. */}
+          <rect x="486" y="570" width="942" height="80" />
         </clipPath>
       </defs>
       <g clipPath="url(#bridge-span)">
@@ -357,8 +359,10 @@ export function GodavariBridge() {
 /* ── Tied-arch bridge drawn in SVG so it stays crisp at any size ── */
 function BridgeDrawing() {
   const deckY = 614;
-  const L = 410;
-  const R = 1530;
+  // Extend past the outer edge of each portal pillar so the bridge ends are
+  // actually occluded by the stone, not visible inside the arch opening.
+  const L = 340;
+  const R = 1600;
   const ink = "oklch(0.20 0.03 35)";
   const inkSoft = "oklch(0.30 0.04 40)";
   const inkFaint = "oklch(0.22 0.03 35 / 0.55)";
@@ -426,7 +430,7 @@ function Train() {
   ];
   const engineX = 148;
   const engineW = 36;
-  const deckY = 628; // body top sits on the bridge deck line
+  const deckY = 596; // body top — body bottom (deckY+16=612) sits on the deck at y=614
   return (
     <g className="train-run">
       {/* soft light trail under the train on the deck */}

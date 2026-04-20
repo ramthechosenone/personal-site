@@ -1592,15 +1592,15 @@
   will-change: transform;
 }
 @keyframes trainRun {
-  /* Clip-path on the parent enforces visibility between the portals;
-     translate runs from fully-tucked-behind-left (t+184 < 470) to
-     fully-tucked-behind-right (t > 1450). 40s cycle: ~11s traverse, ~29s hidden hold. */
-  0%    { transform: translateX(250px); }
-  28%   { transform: translateX(1470px); }
-  100%  { transform: translateX(1470px); }
+  /* Clip window: x=[486, 1428]. Train internal span 0→184.
+     Start fully tucked-behind-left (t+184 ≤ 486 → t=280) and end fully
+     tucked-behind-right (t ≥ 1428 → t=1450). 40s cycle; ~11s traverse. */
+  0%    { transform: translateX(280px); }
+  28%   { transform: translateX(1450px); }
+  100%  { transform: translateX(1450px); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .train-run { animation: none; transform: translateX(250px); }
+  .train-run { animation: none; transform: translateX(280px); }
 }
 
 /* Chamber back button — top-left tap target on chamber subpages */

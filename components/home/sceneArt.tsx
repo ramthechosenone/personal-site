@@ -280,39 +280,39 @@ export function FishingBoat({ cx, baseY, w }: { cx: number; baseY: number; w: nu
 
 /* ── Skyline band — all silhouettes planted on the far-hill crest ── */
 export function SkylineBand({ compact = false }: { compact?: boolean } = {}) {
-  const inkStyle: CSSProperties = {
-    width: "100%",
-    height: "100%",
-    objectFit: "fill",
-    objectPosition: "center bottom",
-    filter: "saturate(0.55) hue-rotate(210deg) brightness(0.88)",
-  };
   return (
     <g aria-hidden="true">
       {/* Warm terracotta haze behind mid-skyline — Kerala/Godavari glow */}
       <ellipse cx="980" cy="480" rx="720" ry="110" fill="oklch(0.72 0.14 45 / 0.22)" style={{ filter: "blur(20px)" }} />
 
       {/* Rainier — ink-brush PNG silhouette, tinted cool-dusk.
-          On mobile (compact), shift right into the xMidYMid slice viewport and shrink
-          so it reads as a small background peak rather than filling the screen. */}
-      <foreignObject
-        x={compact ? 870 : -70}
-        y={compact ? 440 : 295}
-        width={compact ? 220 : 560}
-        height={compact ? 130 : 280}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/ink/rainier.png" style={inkStyle} alt="" />
-      </foreignObject>
+          On mobile (compact), shift into the xMidYMid slice viewport and shrink
+          so it reads as a small background peak, base resting on the far hill crest.
+          Using SVG <image> instead of foreignObject — iOS Safari is unreliable
+          with foreignObject + CSS filter on <img>. */}
+      <image
+        href="/ink/rainier.png"
+        x={compact ? 820 : -70}
+        y={compact ? 395 : 295}
+        width={compact ? 280 : 560}
+        height={compact ? 140 : 280}
+        preserveAspectRatio="xMidYMax meet"
+        style={{ filter: "saturate(0.55) hue-rotate(210deg) brightness(0.88)" }}
+      />
 
       {/* Cool-blue rim halo behind gopuram */}
       <ellipse cx={1705} cy={485} rx={42} ry={55} fill="oklch(0.45 0.08 260 / 0.32)" style={{ filter: "blur(10px)" }} />
 
       {/* Chennai gopuram — ink-brush PNG */}
-      <foreignObject x="1672" y="424" width="65" height="100">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/ink/chennai.png" style={inkStyle} alt="" />
-      </foreignObject>
+      <image
+        href="/ink/chennai.png"
+        x="1672"
+        y="424"
+        width="65"
+        height="100"
+        preserveAspectRatio="xMidYMax meet"
+        style={{ filter: "saturate(0.55) hue-rotate(210deg) brightness(0.88)" }}
+      />
 
       {/* Sunlit right edge on gopuram */}
       <path d="M 1733 438 L 1732 500 L 1729 500 L 1730 442 Z" fill="oklch(0.78 0.12 60)" opacity="0.4" style={{ filter: "blur(1.2px)" }} />
@@ -334,21 +334,16 @@ export function SkylineBand({ compact = false }: { compact?: boolean } = {}) {
 export function GodavariBridge() {
   return (
     <g aria-hidden="true">
-      <foreignObject x="480" y="520" width="960" height="180">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/ink/godavari.png"
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-            objectPosition: "center bottom",
-            filter: "brightness(0.42) saturate(0.3) contrast(1.1)",
-            opacity: 0.92,
-          }}
-          alt=""
-        />
-      </foreignObject>
+      <image
+        href="/ink/godavari.png"
+        x="480"
+        y="520"
+        width="960"
+        height="180"
+        preserveAspectRatio="xMidYMax meet"
+        opacity="0.92"
+        style={{ filter: "brightness(0.42) saturate(0.3) contrast(1.1)" }}
+      />
     </g>
   );
 }

@@ -1582,3 +1582,35 @@
   }
   .polaroid { opacity: 1; }
 }
+
+/* Subpage grids — mobile layout (cairns / terminals wrap to 2 cols) */
+@media (max-width: 720px) {
+  .cairn-grid, .terminal-grid {
+    position: relative;
+    inset: auto;
+    padding: clamp(80px, 14vh, 140px) 0 24px;
+    place-items: start center;
+  }
+  .cairn-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: clamp(20px, 5vw, 36px) clamp(24px, 6vw, 40px);
+    padding: 0 clamp(20px, 6vw, 40px);
+    width: 100%;
+    margin-top: 0;
+    align-items: end;
+  }
+  .cairn-stack {
+    width: clamp(90px, 28vw, 130px);
+  }
+  .terminal-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: clamp(18px, 4vw, 28px);
+    padding: 0 clamp(16px, 5vw, 32px);
+    width: 100%;
+    margin-top: 0;
+    align-items: start;
+  }
+  .terminal-bezel {
+    width: 100%;
+  }
+}

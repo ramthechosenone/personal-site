@@ -1,6 +1,19 @@
 "use client";
 
 import { CSSProperties, Fragment, useEffect, useState } from "react";
+import {
+  SkylineBand,
+  ForegroundWater,
+  GodavariBridge,
+  FloatingDiya,
+  HillPeacock,
+  KalamkariAccents,
+  SoccerBallStone,
+  KiteNearGopuram,
+  XWing,
+  Rain,
+} from "./sceneArt";
+import { Orb, OrbVariant } from "./orbs";
 
 type Face = "left" | "right" | "front";
 
@@ -248,6 +261,36 @@ function Portal({ x, y, scale = 1, label, glowId, onClick, active, face = "front
         </g>
       )}
 
+      {/* Yin/yang sigil above the arch */}
+      <g style={{ pointerEvents: "none" }} transform={`translate(0, ${-pillarH - archR * 0.35})`}>
+        <circle cx="0" cy="0" r="26" fill="oklch(0.88 0.14 65 / 0.2)" style={{ filter: "blur(12px)" }} />
+        <circle cx="0" cy="0" r="17" fill="none" stroke="oklch(0.82 0.06 60 / 0.85)" strokeWidth="1.2" />
+        <circle cx="0" cy="0" r="17" fill="none" stroke="oklch(0.40 0.04 280 / 0.5)" strokeWidth="0.4" />
+        <defs>
+          <mask id={`commaMask-${glowId}`}>
+            <rect x="-20" y="-20" width="40" height="40" fill="black" />
+            <path d="M 0 -17 A 17 17 0 0 0 0 17 L 0 -17 Z" fill="white" />
+            <circle cx="0" cy="-8.5" r="8.5" fill="white" />
+            <circle cx="0" cy="8.5" r="8.5" fill="black" />
+          </mask>
+        </defs>
+        {variant === 0 ? (
+          <>
+            <g mask={`url(#commaMask-${glowId})`}>
+              <rect x="-20" y="-20" width="40" height="40" fill="oklch(0.16 0.03 275 / 0.95)" />
+            </g>
+            <circle cx="-4" cy="-8" r="2.6" fill="oklch(0.96 0.02 80)" />
+          </>
+        ) : (
+          <>
+            <g transform="scale(-1, -1)" mask={`url(#commaMask-${glowId})`}>
+              <rect x="-20" y="-20" width="40" height="40" fill="oklch(0.93 0.03 75 / 0.97)" />
+            </g>
+            <circle cx="4" cy="8" r="2.6" fill="oklch(0.16 0.03 275 / 0.95)" />
+          </>
+        )}
+      </g>
+
       <text className="portal-float-label" x={0} y={baseY + 44}>
         {label}
       </text>
@@ -272,12 +315,37 @@ type SceneProps = {
   showOrb?: boolean;
   showPortals?: boolean;
   reducedMotion?: boolean;
+  orbVariant?: OrbVariant;
 };
 
-export default function DuskScene({ activePortal, onEnter, showOrb = true, showPortals = true, reducedMotion = false }: SceneProps) {
+export default function DuskScene({
+  activePortal,
+  onEnter,
+  showOrb = true,
+  showPortals = true,
+  reducedMotion = false,
+  orbVariant = "ether",
+}: SceneProps) {
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
   const [orbGaze, setOrbGaze] = useState({ x: 0, y: 0 });
   const [motes, setMotes] = useState<Mote[]>([]);
+  const [raining, setRaining] = useState(false);
+
+  useEffect(() => {
+    try {
+      setRaining(localStorage.getItem("dusk-rain") === "1");
+    } catch {}
+  }, []);
+
+  const toggleRain = () => {
+    setRaining((r) => {
+      const next = !r;
+      try {
+        localStorage.setItem("dusk-rain", next ? "1" : "0");
+      } catch {}
+      return next;
+    });
+  };
 
   useEffect(() => {
     if (reducedMotion) return;
@@ -355,25 +423,7 @@ export default function DuskScene({ activePortal, onEnter, showOrb = true, showP
             <stop offset="100%" stopColor="oklch(0.36 0.09 150)" />
           </linearGradient>
 
-          <radialGradient id="orb" cx="40%" cy="36%" r="72%">
-            <stop offset="0%" stopColor="oklch(0.94 0.04 320)" />
-            <stop offset="30%" stopColor="oklch(0.84 0.06 320)" />
-            <stop offset="65%" stopColor="oklch(0.68 0.08 315)" />
-            <stop offset="92%" stopColor="oklch(0.55 0.09 305)" />
-            <stop offset="100%" stopColor="oklch(0.48 0.08 295)" />
-          </radialGradient>
-          <radialGradient id="orbRim" cx="50%" cy="50%" r="50%">
-            <stop offset="72%" stopColor="oklch(0.78 0.14 45)" stopOpacity="0" />
-            <stop offset="90%" stopColor="oklch(0.82 0.17 50)" stopOpacity="0.7" />
-            <stop offset="100%" stopColor="oklch(0.70 0.14 40)" stopOpacity="0" />
-          </radialGradient>
-          <radialGradient id="orbHalo" cx="50%" cy="50%" r="50%">
-            <stop offset="40%" stopColor="oklch(0.86 0.12 50)" stopOpacity="0" />
-            <stop offset="70%" stopColor="oklch(0.86 0.12 50)" stopOpacity="0.2" />
-            <stop offset="100%" stopColor="oklch(0.86 0.12 50)" stopOpacity="0" />
-          </radialGradient>
-
-          {["g0", "g1"].map((g) => (
+          {["g0", "g1", "g2"].map((g) => (
             <Fragment key={g}>
               <radialGradient id={g} cx="50%" cy="50%" r="50%">
                 <stop offset="0%" stopColor="oklch(0.92 0.18 65)" stopOpacity="0.6" />
@@ -385,13 +435,48 @@ export default function DuskScene({ activePortal, onEnter, showOrb = true, showP
                 <stop offset="55%" stopColor="oklch(0.84 0.16 55)" />
                 <stop offset="100%" stopColor="oklch(0.70 0.14 45)" />
               </linearGradient>
+              <linearGradient id={`${g}-line`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="oklch(0.96 0.14 70)" stopOpacity="0" />
+                <stop offset="20%" stopColor="oklch(0.94 0.16 65)" stopOpacity="0.9" />
+                <stop offset="55%" stopColor="oklch(0.88 0.18 60)" stopOpacity="1" />
+                <stop offset="85%" stopColor="oklch(0.82 0.18 55)" stopOpacity="0.85" />
+                <stop offset="100%" stopColor="oklch(0.74 0.14 45)" stopOpacity="0" />
+              </linearGradient>
             </Fragment>
           ))}
+
+          <linearGradient id="pillarShade" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="oklch(0.30 0.03 40)" stopOpacity="0.45" />
+            <stop offset="45%" stopColor="oklch(0.30 0.03 40)" stopOpacity="0" />
+            <stop offset="100%" stopColor="oklch(0.90 0.05 70)" stopOpacity="0.28" />
+          </linearGradient>
+
+          <linearGradient id="fg-water" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="oklch(0.52 0.07 50)" />
+            <stop offset="35%" stopColor="oklch(0.42 0.06 40)" />
+            <stop offset="75%" stopColor="oklch(0.32 0.05 280)" />
+            <stop offset="100%" stopColor="oklch(0.24 0.04 285)" />
+          </linearGradient>
+          <linearGradient id="fg-water-fade" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#000" stopOpacity="0" />
+            <stop offset="12%" stopColor="#fff" stopOpacity="1" />
+            <stop offset="88%" stopColor="#fff" stopOpacity="1" />
+            <stop offset="100%" stopColor="#000" stopOpacity="0" />
+          </linearGradient>
+          <mask id="fg-water-mask" maskUnits="userSpaceOnUse" x="200" y="600" width="1500" height="110">
+            <rect x="200" y="600" width="1500" height="110" fill="url(#fg-water-fade)" />
+          </mask>
 
           <radialGradient id="vignette" cx="50%" cy="55%" r="75%">
             <stop offset="70%" stopColor="oklch(0 0 0 / 0)" />
             <stop offset="100%" stopColor="oklch(0.18 0.05 280 / 0.45)" />
           </radialGradient>
+
+          <pattern id="grassTex" x="0" y="0" width="12" height="10" patternUnits="userSpaceOnUse">
+            <line x1="2" y1="10" x2="2" y2="6" stroke="oklch(0.52 0.10 160 / 0.6)" strokeWidth="1" />
+            <line x1="7" y1="10" x2="7" y2="5" stroke="oklch(0.40 0.09 150 / 0.7)" strokeWidth="1" />
+            <line x1="11" y1="10" x2="11" y2="7" stroke="oklch(0.56 0.10 165 / 0.5)" strokeWidth="1" />
+          </pattern>
 
           <filter id="stoneGrain" x="0" y="0" width="1" height="1" filterUnits="objectBoundingBox">
             <feTurbulence type="fractalNoise" baseFrequency="1.8" numOctaves="2" seed="4" />
@@ -465,6 +550,27 @@ export default function DuskScene({ activePortal, onEnter, showOrb = true, showP
           ))}
         </g>
 
+        {/* Morphing skyline band — Rainier, DFW, Godavari, Bangalore, Chennai, Mumbai */}
+        <g style={p(5)}>
+          <SkylineBand />
+          <rect
+            x="40"
+            y="330"
+            width="340"
+            height="230"
+            fill="transparent"
+            style={{ cursor: "pointer", pointerEvents: "all" }}
+            onClick={toggleRain}
+          >
+            <title>{raining ? "Stop the rain" : "Bring the rain (Rainier)"}</title>
+          </rect>
+          <KiteNearGopuram />
+        </g>
+
+        <g style={p(3)}>
+          <XWing />
+        </g>
+
         <g style={p(6)}>
           <path
             d="M -50 560 Q 180 480 400 510 T 820 500 Q 1050 460 1280 520 T 1720 500 Q 1880 480 1980 520 L 1980 640 L -50 640 Z"
@@ -486,6 +592,25 @@ export default function DuskScene({ activePortal, onEnter, showOrb = true, showP
           <Cypress x={760} y={592} h={48} opacity={0.8} />
           <Cypress x={1180} y={548} h={62} opacity={0.85} />
           <Cypress x={1460} y={620} h={50} opacity={0.85} />
+          <HillPeacock x={1340} baseY={580} scale={0.75} />
+        </g>
+
+        {/* Foreground water channel (Godavari) */}
+        <g style={p(12)}>
+          <ForegroundWater />
+        </g>
+        <g style={p(13)}>
+          <GodavariBridge />
+        </g>
+
+        {/* Floating diyas */}
+        <g style={p(14)}>
+          <FloatingDiya x={380} y={658} scale={1.4} />
+          <FloatingDiya x={430} y={662} scale={1.1} />
+          <FloatingDiya x={470} y={656} scale={0.9} />
+          <FloatingDiya x={1520} y={655} scale={1.2} />
+          <FloatingDiya x={1560} y={659} scale={1.0} />
+          <FloatingDiya x={1600} y={652} scale={0.8} />
         </g>
 
         <g style={p(16)}>
@@ -512,10 +637,10 @@ export default function DuskScene({ activePortal, onEnter, showOrb = true, showP
                 scale={0.92}
                 face="left"
                 variant={0}
-                label="PERSONAL"
+                label="WORK"
                 glowId="g0"
-                onClick={() => onEnter("personal")}
-                active={activePortal === "personal"}
+                onClick={() => onEnter("work")}
+                active={activePortal === "work"}
               />
               <Portal
                 x={1500}
@@ -523,10 +648,10 @@ export default function DuskScene({ activePortal, onEnter, showOrb = true, showP
                 scale={0.96}
                 face="right"
                 variant={1}
-                label="WORK"
+                label="PERSONAL"
                 glowId="g1"
-                onClick={() => onEnter("work")}
-                active={activePortal === "work"}
+                onClick={() => onEnter("personal")}
+                active={activePortal === "personal"}
               />
             </>
           )}
@@ -585,42 +710,20 @@ export default function DuskScene({ activePortal, onEnter, showOrb = true, showP
         {showOrb && (
           <g style={p(24)}>
             <g transform={`translate(${860 + orbGaze.x * 2}, ${860 + orbGaze.y * 0.5})`}>
-              <circle cx="0" cy="0" r="200" fill="url(#orbHalo)" />
-              <ellipse cx="0" cy="132" rx="160" ry="22" fill="oklch(0.22 0.04 20 / 0.40)" style={{ filter: "blur(4px)" }} />
-              <ellipse cx="0" cy="132" rx="110" ry="12" fill="oklch(0.22 0.04 20 / 0.35)" />
-              <ellipse cx="0" cy="126" rx="180" ry="8" fill="oklch(0.84 0.14 50 / 0.55)" style={{ filter: "blur(3px)" }} />
-              <circle cx="0" cy="0" r="128" fill="url(#orb)" />
-              <circle cx="0" cy="0" r="128" fill="url(#orbRim)" />
-              <path
-                d="M 90 -30 A 128 128 0 0 1 -20 120"
-                stroke="oklch(0.86 0.16 50 / 0.55)"
-                strokeWidth="4"
-                fill="none"
-                style={{ filter: "blur(1.5px)" }}
-              />
-              <ellipse
-                cx={-42 + orbGaze.x * 0.4}
-                cy={-50 + orbGaze.y * 0.4}
-                rx="30"
-                ry="18"
-                fill="oklch(0.98 0.03 60 / 0.4)"
-                style={{ filter: "blur(2px)" }}
-              />
-              <g fill="oklch(0.30 0.09 150)">
-                {[-110, -85, -55, -20, 30, 65, 95, 120].map((bx, i) => (
-                  <rect key={i} x={bx} y={120 + ((i * 3) % 8)} width="1.3" height={8 + ((i * 5) % 8)} />
-                ))}
-              </g>
-              <g fill="oklch(0.48 0.10 155)">
-                {[-95, -60, -30, 10, 45, 80, 110].map((bx, i) => (
-                  <rect key={`fg${i}`} x={bx} y={122 + ((i * 4) % 6)} width="1" height={6 + ((i * 4) % 6)} />
-                ))}
-              </g>
+              <Orb variant={orbVariant} gaze={orbGaze} />
             </g>
           </g>
         )}
 
-        <g style={p(30)}>
+        <g style={{ ...p(28), pointerEvents: "none" }}>
+          <SoccerBallStone />
+        </g>
+
+        <g style={{ ...p(2), pointerEvents: "none" }}>
+          <KalamkariAccents />
+        </g>
+
+        <g style={{ ...p(30), pointerEvents: "none" }}>
           <circle
             cx="1680"
             cy="940"
@@ -640,7 +743,11 @@ export default function DuskScene({ activePortal, onEnter, showOrb = true, showP
           />
         </g>
 
-        <rect x="0" y="0" width="1920" height="1080" fill="url(#vignette)" />
+        <rect x="0" y="0" width="1920" height="1080" fill="url(#vignette)" style={{ pointerEvents: "none" }} />
+
+        <g style={{ pointerEvents: "none" }}>
+          <Rain on={raining} />
+        </g>
       </svg>
 
       {motes.map((m) => (

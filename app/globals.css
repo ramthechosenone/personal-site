@@ -1588,15 +1588,15 @@
    disappears behind the right (PERSONAL) portal at x≈1500.
    Train internal coords: cars span 0→142, engine 148→184. */
 .train-run {
-  animation: trainRun 18s linear infinite;
-  will-change: transform, opacity;
+  animation: trainRun 40s linear infinite;
+  will-change: transform;
 }
 @keyframes trainRun {
   /* Clip-path on the parent enforces visibility between the portals;
      translate runs from fully-tucked-behind-left (t+184 < 470) to
-     fully-tucked-behind-right (t > 1450). */
+     fully-tucked-behind-right (t > 1450). 40s cycle: ~11s traverse, ~29s hidden hold. */
   0%    { transform: translateX(250px); }
-  60%   { transform: translateX(1470px); }
+  28%   { transform: translateX(1470px); }
   100%  { transform: translateX(1470px); }
 }
 @media (prefers-reduced-motion: reduce) {

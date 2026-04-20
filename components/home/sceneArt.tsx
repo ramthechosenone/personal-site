@@ -336,18 +336,9 @@ export function GodavariBridge() {
     <g aria-hidden="true">
       {/* Bridge deck — extended left so it tucks behind the WORK arch pillar.
           Arches render on a higher parallax layer so they naturally occlude it. */}
-      {/* Bridge lives only between the two portals — its ends tuck behind the
-          arch pillars so the bridge visually terminates at each portal. */}
-      <image
-        href="/ink/godavari.png"
-        x="410"
-        y="496"
-        width="1120"
-        height="224"
-        preserveAspectRatio="none"
-        opacity="0.92"
-        style={{ filter: "brightness(0.42) saturate(0.3) contrast(1.1)" }}
-      />
+      {/* Bridge drawn as crisp SVG paths (was a stretched PNG — blurred).
+          Lives only between the two portals; ends tuck behind the arch pillars. */}
+      <BridgeDrawing />
       {/* Clip the train to the span between the portal inner edges so it can
           never appear to the side of an arch — it only materializes between
           them, as if passing portal-to-portal. */}
@@ -359,6 +350,63 @@ export function GodavariBridge() {
       <g clipPath="url(#bridge-span)">
         <Train />
       </g>
+    </g>
+  );
+}
+
+/* ── Tied-arch bridge drawn in SVG so it stays crisp at any size ── */
+function BridgeDrawing() {
+  const deckY = 614;
+  const L = 410;
+  const R = 1530;
+  const ink = "oklch(0.20 0.03 35)";
+  const inkSoft = "oklch(0.30 0.04 40)";
+  const inkFaint = "oklch(0.22 0.03 35 / 0.55)";
+  const archCenters = [550, 830, 1110, 1390];
+  const archHalfW = 140;
+  const archRise = 82;
+  const pillarXs = [410, 690, 970, 1250, 1530];
+
+  return (
+    <g aria-hidden="true">
+      {/* Pillars below deck */}
+      {pillarXs.map((px) => (
+        <rect key={px} x={px - 3} y={deckY + 2} width={6} height={56} fill={ink} />
+      ))}
+      {/* Deck band */}
+      <rect x={L} y={deckY - 2} width={R - L} height={8} fill={ink} />
+      <rect x={L} y={deckY + 6} width={R - L} height={1.5} fill={inkSoft} opacity="0.55" />
+      {/* Tied arches with suspension cables */}
+      {archCenters.map((cx) => {
+        const apexY = deckY - archRise;
+        const left = cx - archHalfW;
+        const right = cx + archHalfW;
+        const cables = [];
+        const steps = 11;
+        for (let i = 1; i < steps; i++) {
+          const t = i / steps; // 0..1
+          const sx = left + t * (right - left);
+          // quadratic bezier y at parameter t (symmetric): y = deckY - 4 * archRise * t * (1 - t)
+          const sy = deckY - 4 * archRise * t * (1 - t);
+          cables.push(
+            <line key={i} x1={sx} y1={sy} x2={sx} y2={deckY - 2} stroke={inkFaint} strokeWidth="0.8" />
+          );
+        }
+        return (
+          <g key={cx}>
+            {cables}
+            <path
+              d={`M ${left} ${deckY - 2} Q ${cx} ${apexY - archRise} ${right} ${deckY - 2}`}
+              stroke={ink}
+              strokeWidth="2.6"
+              fill="none"
+              strokeLinecap="round"
+            />
+          </g>
+        );
+      })}
+      {/* Faint reflection under deck */}
+      <rect x={L} y={deckY + 60} width={R - L} height={1.2} fill={ink} opacity="0.22" />
     </g>
   );
 }

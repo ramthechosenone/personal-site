@@ -316,6 +316,7 @@ type SceneProps = {
   showPortals?: boolean;
   reducedMotion?: boolean;
   orbVariant?: OrbVariant;
+  compact?: boolean;
 };
 
 export default function DuskScene({
@@ -325,6 +326,7 @@ export default function DuskScene({
   showPortals = true,
   reducedMotion = false,
   orbVariant = "ether",
+  compact = false,
 }: SceneProps) {
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
   const [orbGaze, setOrbGaze] = useState({ x: 0, y: 0 });
@@ -552,12 +554,12 @@ export default function DuskScene({
 
         {/* Morphing skyline band — Rainier, DFW, Godavari, Bangalore, Chennai, Mumbai */}
         <g style={p(5)}>
-          <SkylineBand />
+          <SkylineBand compact={compact} />
           <rect
-            x="40"
-            y="330"
-            width="340"
-            height="230"
+            x={compact ? 820 : 40}
+            y={compact ? 430 : 330}
+            width={compact ? 240 : 340}
+            height={compact ? 160 : 230}
             fill="transparent"
             style={{ cursor: "pointer", pointerEvents: "all" }}
             onClick={toggleRain}

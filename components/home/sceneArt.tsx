@@ -279,7 +279,7 @@ export function FishingBoat({ cx, baseY, w }: { cx: number; baseY: number; w: nu
 }
 
 /* ── Skyline band — all silhouettes planted on the far-hill crest ── */
-export function SkylineBand() {
+export function SkylineBand({ compact = false }: { compact?: boolean } = {}) {
   const inkStyle: CSSProperties = {
     width: "100%",
     height: "100%",
@@ -292,8 +292,15 @@ export function SkylineBand() {
       {/* Warm terracotta haze behind mid-skyline — Kerala/Godavari glow */}
       <ellipse cx="980" cy="480" rx="720" ry="110" fill="oklch(0.72 0.14 45 / 0.22)" style={{ filter: "blur(20px)" }} />
 
-      {/* Rainier — ink-brush PNG silhouette, tinted cool-dusk */}
-      <foreignObject x="-70" y="295" width="560" height="280">
+      {/* Rainier — ink-brush PNG silhouette, tinted cool-dusk.
+          On mobile (compact), shift right into the xMidYMid slice viewport and shrink
+          so it reads as a small background peak rather than filling the screen. */}
+      <foreignObject
+        x={compact ? 870 : -70}
+        y={compact ? 440 : 295}
+        width={compact ? 220 : 560}
+        height={compact ? 130 : 280}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/ink/rainier.png" style={inkStyle} alt="" />
       </foreignObject>

@@ -47,11 +47,6 @@ export default function MobileHome({
         </a>
       </div>
 
-      <div className="m-intro">
-        <span className="m-kicker">PORTFOLIO · V2026</span>
-        <h1 className="m-tagline">{tagline}</h1>
-      </div>
-
       <div className="m-archrow">
         <button className="m-arch" type="button" onClick={() => onEnter("personal")}>
           <span className="m-arch-num">01</span>

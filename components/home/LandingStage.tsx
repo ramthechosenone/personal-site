@@ -73,6 +73,7 @@ export default function LandingStage() {
         onEnter={enter}
         showPortals={!isMobile}
         reducedMotion={reducedMotion}
+        compact={isMobile}
       />
 
       <div className="portal-warm-veil" aria-hidden="true" />

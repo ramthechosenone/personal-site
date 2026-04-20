@@ -334,13 +334,13 @@ export function SkylineBand({ compact = false }: { compact?: boolean } = {}) {
 export function GodavariBridge() {
   return (
     <g aria-hidden="true">
-      {/* Bridge deck — extended left so it disappears behind the WORK arch pillar.
+      {/* Bridge deck — extended left so it tucks behind the WORK arch pillar.
           Arches render on a higher parallax layer so they naturally occlude it. */}
       <image
         href="/ink/godavari.png"
-        x="200"
+        x="40"
         y="496"
-        width="1280"
+        width="1480"
         height="224"
         preserveAspectRatio="xMidYMax meet"
         opacity="0.92"
@@ -351,36 +351,41 @@ export function GodavariBridge() {
   );
 }
 
-/* ── Train that crosses the bridge on a slow loop ── */
+/* ── Train that crosses the bridge on a slow loop.
+      Engine leads on the right (travel direction is left→right) with cars trailing. ── */
 function Train() {
-  // Base positions at the bridge deck line. Cars rendered left→right.
   const bodyFill = "oklch(0.16 0.02 35)";
   const rim = "oklch(0.30 0.03 40)";
   const windowFill = "oklch(0.94 0.18 72)";
   const windowGlow = "oklch(0.90 0.20 68 / 0.7)";
+  // Cars trail behind the engine (leftward)
   const cars = [
-    { x: 38, w: 46 },
-    { x: 86, w: 46 },
-    { x: 134, w: 46 },
+    { x: 0, w: 46 },
+    { x: 48, w: 46 },
+    { x: 96, w: 46 },
   ];
+  const engineX = 148;
+  const engineW = 36;
+  const deckY = 678; // body top sits on deck
   return (
     <g className="train-run">
       {/* soft light trail under the train on the deck */}
-      <ellipse cx="100" cy="658" rx="130" ry="4" fill={windowGlow} opacity="0.25" style={{ filter: "blur(4px)" }} />
-      {/* Engine */}
-      <rect x="0" y="640" width="36" height="16" fill={bodyFill} stroke={rim} strokeWidth="0.5" />
-      <rect x="28" y="634" width="6" height="6" fill={bodyFill} />
+      <ellipse cx="92" cy={deckY + 20} rx="130" ry="4" fill={windowGlow} opacity="0.25" style={{ filter: "blur(4px)" }} />
       {/* Cars */}
       {cars.map((c) => (
-        <rect key={c.x} x={c.x} y="642" width={c.w} height="14" fill={bodyFill} stroke={rim} strokeWidth="0.5" />
+        <rect key={c.x} x={c.x} y={deckY + 2} width={c.w} height="14" fill={bodyFill} stroke={rim} strokeWidth="0.5" />
       ))}
-      {/* Warm window lights */}
-      {[6, 16, 44, 52, 60, 68, 92, 100, 108, 116, 140, 148, 156, 164].map((wx) => (
-        <rect key={wx} x={wx} y="646" width="3" height="4" fill={windowFill} />
+      {/* Engine — leading */}
+      <rect x={engineX} y={deckY} width={engineW} height="16" fill={bodyFill} stroke={rim} strokeWidth="0.5" />
+      {/* Smokestack on the cab end of the engine */}
+      <rect x={engineX + 4} y={deckY - 6} width="6" height="6" fill={bodyFill} />
+      {/* Warm window lights — cars + engine cab */}
+      {[4, 12, 20, 28, 52, 60, 68, 76, 100, 108, 116, 124, 152, 160, 170, 178].map((wx) => (
+        <rect key={wx} x={wx} y={deckY + 6} width="3" height="4" fill={windowFill} />
       ))}
-      {/* Headlight */}
-      <circle cx="35" cy="648" r="1.6" fill={windowFill} />
-      <circle cx="35" cy="648" r="5" fill={windowGlow} style={{ filter: "blur(3px)" }} />
+      {/* Headlight at the leading (right) edge of the engine */}
+      <circle cx={engineX + engineW - 1} cy={deckY + 8} r="1.6" fill={windowFill} />
+      <circle cx={engineX + engineW - 1} cy={deckY + 8} r="5" fill={windowGlow} style={{ filter: "blur(3px)" }} />
     </g>
   );
 }

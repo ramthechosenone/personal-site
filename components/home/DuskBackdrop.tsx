@@ -21,6 +21,7 @@ export default function DuskBackdrop() {
         onEnter={() => {}}
         showOrb={false}
         showPortals={false}
+        showBridge={false}
         reducedMotion={reducedMotion}
       />
     </div>

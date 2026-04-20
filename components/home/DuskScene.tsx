@@ -314,6 +314,7 @@ type SceneProps = {
   onEnter: (which: "work" | "personal") => void;
   showOrb?: boolean;
   showPortals?: boolean;
+  showBridge?: boolean;
   reducedMotion?: boolean;
   orbVariant?: OrbVariant;
   compact?: boolean;
@@ -324,6 +325,7 @@ export default function DuskScene({
   onEnter,
   showOrb = true,
   showPortals = true,
+  showBridge = true,
   reducedMotion = false,
   orbVariant = "ether",
   compact = false,
@@ -601,9 +603,11 @@ export default function DuskScene({
         <g style={p(12)}>
           <ForegroundWater />
         </g>
-        <g style={p(13)}>
-          <GodavariBridge />
-        </g>
+        {showBridge && (
+          <g style={p(13)}>
+            <GodavariBridge />
+          </g>
+        )}
 
         {/* Floating diyas */}
         <g style={p(14)}>

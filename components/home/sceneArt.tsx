@@ -342,7 +342,7 @@ export function GodavariBridge() {
         y="496"
         width="1480"
         height="224"
-        preserveAspectRatio="xMidYMax meet"
+        preserveAspectRatio="none"
         opacity="0.92"
         style={{ filter: "brightness(0.42) saturate(0.3) contrast(1.1)" }}
       />
@@ -366,7 +366,7 @@ function Train() {
   ];
   const engineX = 148;
   const engineW = 36;
-  const deckY = 678; // body top sits on deck
+  const deckY = 598; // body top sits on bridge deck line (deck at y≈614 after stretch)
   return (
     <g className="train-run">
       {/* soft light trail under the train on the deck */}

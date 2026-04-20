@@ -1,0 +1,81 @@
+/* Movie Recommender — Scoped dark cinema styles */
+
+.movies-type-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.movies-type-movie {
+  background-color: rgba(229, 9, 20, 0.2);
+  color: #E50914;
+  border: 1px solid rgba(229, 9, 20, 0.3);
+}
+
+.movies-type-tv {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: #60A5FA;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.movies-type-anime {
+  background-color: rgba(168, 85, 247, 0.2);
+  color: #C084FC;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.movies-source-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.movies-source-svd {
+  background-color: rgba(255, 215, 0, 0.15);
+  color: #FFD700;
+}
+
+.movies-source-tmdb {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #34D399;
+}
+
+.movies-table-header {
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #8B8B8B;
+}
+
+.movies-divider {
+  border: none;
+  border-top: 1px solid #2A2A3E;
+  margin: 1.5rem 0;
+}
+
+.movies-divider-red {
+  border: none;
+  border-top: 2px solid #E50914;
+  margin: 1.5rem 0;
+}
+
+.movies-star-filled {
+  color: #FFD700;
+}
+
+.movies-star-empty {
+  color: #5A5A5A;
+}
+
+.movies-star-half {
+  color: #FFD700;
+}

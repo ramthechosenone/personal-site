@@ -1583,18 +1583,23 @@
   .polaroid { opacity: 1; }
 }
 
-/* Train crossing the Godavari bridge — loops every ~18s */
+/* Train crossing the Godavari bridge — visibility is bound to the deck span.
+   Bridge spans x=40→1520 in the SVG viewBox; train internal coords span x=0→184.
+   Engine enters at bridge-left and the last car exits at bridge-right; the train
+   is hidden before/after so it never appears off the bridge. */
 .train-run {
   animation: trainRun 18s linear infinite;
-  will-change: transform;
+  will-change: transform, opacity;
 }
 @keyframes trainRun {
-  0%   { transform: translateX(-220px); }
-  55%  { transform: translateX(1950px); }
-  100% { transform: translateX(1950px); }
+  0%    { transform: translateX(-200px); opacity: 0; }
+  3%    { transform: translateX(-150px); opacity: 1; }
+  52%   { transform: translateX(1470px); opacity: 1; }
+  55%   { transform: translateX(1560px); opacity: 0; }
+  100%  { transform: translateX(1560px); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .train-run { animation: none; transform: translateX(-220px); }
+  .train-run { animation: none; opacity: 0; }
 }
 
 /* Chamber back button — top-left tap target on chamber subpages */

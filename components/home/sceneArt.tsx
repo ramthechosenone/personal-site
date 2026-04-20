@@ -334,22 +334,22 @@ export function SkylineBand({ compact = false }: { compact?: boolean } = {}) {
 export function GodavariBridge() {
   return (
     <g aria-hidden="true">
-      {/* Bridge deck — extended left so it tucks behind the WORK arch pillar.
-          Arches render on a higher parallax layer so they naturally occlude it. */}
-      {/* Bridge drawn as crisp SVG paths (was a stretched PNG — blurred).
-          Lives only between the two portals; ends tuck behind the arch pillars. */}
-      <BridgeDrawing />
-      {/* Clip the train to the span between the portal inner edges so it can
-          never appear to the side of an arch — it only materializes between
-          them, as if passing portal-to-portal. */}
+      {/* Portal-to-portal visible window. Left portal outer-right ≈484, right
+          portal outer-left ≈1430. Both the bridge AND the train are clipped
+          to this window so nothing leaks into the translucent portal interiors. */}
       <defs>
         <clipPath id="bridge-span" clipPathUnits="userSpaceOnUse">
-          {/* Portal-to-portal visible window: left portal outer-right ≈484,
-              right portal outer-left ≈1430. Train can only materialize here. */}
+          <rect x="486" y="500" width="942" height="180" />
+        </clipPath>
+        <clipPath id="train-span" clipPathUnits="userSpaceOnUse">
+          {/* Train uses the same horizontal range but a tighter vertical band. */}
           <rect x="486" y="570" width="942" height="80" />
         </clipPath>
       </defs>
       <g clipPath="url(#bridge-span)">
+        <BridgeDrawing />
+      </g>
+      <g clipPath="url(#train-span)">
         <Train />
       </g>
     </g>

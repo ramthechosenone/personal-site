@@ -1583,20 +1583,20 @@
   .polaroid { opacity: 1; }
 }
 
-/* Train crossing the Godavari bridge — visibility is bound to the deck span.
-   Bridge spans x=40→1520 in the SVG viewBox; train internal coords span x=0→184.
-   Engine enters at bridge-left and the last car exits at bridge-right; the train
-   is hidden before/after so it never appears off the bridge. */
+/* Train crossing the Godavari bridge — the train only exists between the
+   two portals. It emerges from behind the left (WORK) portal at x≈420 and
+   disappears behind the right (PERSONAL) portal at x≈1500.
+   Train internal coords: cars span 0→142, engine 148→184. */
 .train-run {
   animation: trainRun 18s linear infinite;
   will-change: transform, opacity;
 }
 @keyframes trainRun {
-  0%    { transform: translateX(-200px); opacity: 0; }
-  3%    { transform: translateX(-150px); opacity: 1; }
-  52%   { transform: translateX(1470px); opacity: 1; }
-  55%   { transform: translateX(1560px); opacity: 0; }
-  100%  { transform: translateX(1560px); opacity: 0; }
+  0%    { transform: translateX(200px); opacity: 0; }      /* tucked behind left portal */
+  4%    { transform: translateX(260px); opacity: 1; }      /* engine emerging */
+  62%   { transform: translateX(1280px); opacity: 1; }     /* engine approaching right portal */
+  66%   { transform: translateX(1340px); opacity: 0; }     /* swallowed by right portal */
+  100%  { transform: translateX(1340px); opacity: 0; }     /* hold off-stage */
 }
 @media (prefers-reduced-motion: reduce) {
   .train-run { animation: none; opacity: 0; }

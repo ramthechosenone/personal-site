@@ -336,11 +336,13 @@ export function GodavariBridge() {
     <g aria-hidden="true">
       {/* Bridge deck — extended left so it tucks behind the WORK arch pillar.
           Arches render on a higher parallax layer so they naturally occlude it. */}
+      {/* Bridge lives only between the two portals — its ends tuck behind the
+          arch pillars so the bridge visually terminates at each portal. */}
       <image
         href="/ink/godavari.png"
-        x="40"
+        x="420"
         y="496"
-        width="1480"
+        width="1080"
         height="224"
         preserveAspectRatio="none"
         opacity="0.92"
@@ -366,7 +368,7 @@ function Train() {
   ];
   const engineX = 148;
   const engineW = 36;
-  const deckY = 598; // body top sits on bridge deck line (deck at y≈614 after stretch)
+  const deckY = 628; // body top sits on the bridge deck line
   return (
     <g className="train-run">
       {/* soft light trail under the train on the deck */}

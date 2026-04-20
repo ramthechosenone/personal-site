@@ -1583,6 +1583,36 @@
   .polaroid { opacity: 1; }
 }
 
+/* Chamber back button — top-left tap target on chamber subpages */
+.chamber-back {
+  position: absolute;
+  top: clamp(14px, 3vw, 28px);
+  left: clamp(14px, 3vw, 28px);
+  z-index: 40;
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: oklch(0.96 0.01 70 / 0.75);
+  backdrop-filter: blur(8px) saturate(1.05);
+  -webkit-backdrop-filter: blur(8px) saturate(1.05);
+  border: 1px solid oklch(0.22 0.04 20 / 0.12);
+  border-radius: 999px;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 0 4px 14px oklch(0 0 0 / 0.22);
+  transition: transform .3s var(--ease), background .3s var(--ease);
+}
+.chamber-back:hover,
+.chamber-back:active {
+  transform: translateX(-2px);
+  background: oklch(0.98 0.01 70 / 0.9);
+}
+
 /* Subpage grids — mobile layout (cairns / terminals wrap to 2 cols) */
 @media (max-width: 720px) {
   .cairn-grid, .terminal-grid {

@@ -43,9 +43,6 @@ export default function ChamberPage({
   const [reducedMotion, setReducedMotion] = useState(false);
   const [exiting, setExiting] = useState(false);
   const [motes, setMotes] = useState<Mote[]>([]);
-  const [time, setTime] = useState<string>(() =>
-    new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-  );
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -91,13 +88,6 @@ export default function ChamberPage({
     }, 520);
     return () => window.clearInterval(iv);
   }, [reducedMotion]);
-
-  useEffect(() => {
-    const iv = window.setInterval(() => {
-      setTime(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
-    }, 30000);
-    return () => window.clearInterval(iv);
-  }, []);
 
   const onBack = useCallback(() => {
     if (exiting) return;
@@ -145,15 +135,14 @@ export default function ChamberPage({
           <a href="mailto:srirampdevarapu@gmail.com">CONTACT</a>
         </nav>
 
-        <div className="footer-strip">
-          <div className="meta">
-            <span>{time.toUpperCase()}</span>
-            <span>SF · CA</span>
-          </div>
-          <div className="meta">
-            <span>PORTFOLIO / v2026</span>
-          </div>
-        </div>
+        <button
+          type="button"
+          className="chamber-back"
+          onClick={onBack}
+          aria-label="Back to home"
+        >
+          ← HOME
+        </button>
       </div>
 
       {gridVariant === "cairn" ? (

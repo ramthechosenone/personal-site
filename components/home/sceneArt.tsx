@@ -340,15 +340,25 @@ export function GodavariBridge() {
           arch pillars so the bridge visually terminates at each portal. */}
       <image
         href="/ink/godavari.png"
-        x="420"
+        x="410"
         y="496"
-        width="1080"
+        width="1120"
         height="224"
         preserveAspectRatio="none"
         opacity="0.92"
         style={{ filter: "brightness(0.42) saturate(0.3) contrast(1.1)" }}
       />
-      <Train />
+      {/* Clip the train to the span between the portal inner edges so it can
+          never appear to the side of an arch — it only materializes between
+          them, as if passing portal-to-portal. */}
+      <defs>
+        <clipPath id="bridge-span" clipPathUnits="userSpaceOnUse">
+          <rect x="470" y="600" width="980" height="80" />
+        </clipPath>
+      </defs>
+      <g clipPath="url(#bridge-span)">
+        <Train />
+      </g>
     </g>
   );
 }

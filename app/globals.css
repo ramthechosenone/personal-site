@@ -1592,14 +1592,15 @@
   will-change: transform, opacity;
 }
 @keyframes trainRun {
-  0%    { transform: translateX(200px); opacity: 0; }      /* tucked behind left portal */
-  4%    { transform: translateX(260px); opacity: 1; }      /* engine emerging */
-  62%   { transform: translateX(1280px); opacity: 1; }     /* engine approaching right portal */
-  66%   { transform: translateX(1340px); opacity: 0; }     /* swallowed by right portal */
-  100%  { transform: translateX(1340px); opacity: 0; }     /* hold off-stage */
+  /* Clip-path on the parent enforces visibility between the portals;
+     translate runs from fully-tucked-behind-left (t+184 < 470) to
+     fully-tucked-behind-right (t > 1450). */
+  0%    { transform: translateX(250px); }
+  60%   { transform: translateX(1470px); }
+  100%  { transform: translateX(1470px); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .train-run { animation: none; opacity: 0; }
+  .train-run { animation: none; transform: translateX(250px); }
 }
 
 /* Chamber back button — top-left tap target on chamber subpages */

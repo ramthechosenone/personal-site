@@ -334,16 +334,53 @@ export function SkylineBand({ compact = false }: { compact?: boolean } = {}) {
 export function GodavariBridge() {
   return (
     <g aria-hidden="true">
+      {/* Bridge deck — extended left so it disappears behind the WORK arch pillar.
+          Arches render on a higher parallax layer so they naturally occlude it. */}
       <image
         href="/ink/godavari.png"
-        x="480"
-        y="520"
-        width="960"
-        height="180"
+        x="200"
+        y="496"
+        width="1280"
+        height="224"
         preserveAspectRatio="xMidYMax meet"
         opacity="0.92"
         style={{ filter: "brightness(0.42) saturate(0.3) contrast(1.1)" }}
       />
+      <Train />
+    </g>
+  );
+}
+
+/* ── Train that crosses the bridge on a slow loop ── */
+function Train() {
+  // Base positions at the bridge deck line. Cars rendered left→right.
+  const bodyFill = "oklch(0.16 0.02 35)";
+  const rim = "oklch(0.30 0.03 40)";
+  const windowFill = "oklch(0.94 0.18 72)";
+  const windowGlow = "oklch(0.90 0.20 68 / 0.7)";
+  const cars = [
+    { x: 38, w: 46 },
+    { x: 86, w: 46 },
+    { x: 134, w: 46 },
+  ];
+  return (
+    <g className="train-run">
+      {/* soft light trail under the train on the deck */}
+      <ellipse cx="100" cy="658" rx="130" ry="4" fill={windowGlow} opacity="0.25" style={{ filter: "blur(4px)" }} />
+      {/* Engine */}
+      <rect x="0" y="640" width="36" height="16" fill={bodyFill} stroke={rim} strokeWidth="0.5" />
+      <rect x="28" y="634" width="6" height="6" fill={bodyFill} />
+      {/* Cars */}
+      {cars.map((c) => (
+        <rect key={c.x} x={c.x} y="642" width={c.w} height="14" fill={bodyFill} stroke={rim} strokeWidth="0.5" />
+      ))}
+      {/* Warm window lights */}
+      {[6, 16, 44, 52, 60, 68, 92, 100, 108, 116, 140, 148, 156, 164].map((wx) => (
+        <rect key={wx} x={wx} y="646" width="3" height="4" fill={windowFill} />
+      ))}
+      {/* Headlight */}
+      <circle cx="35" cy="648" r="1.6" fill={windowFill} />
+      <circle cx="35" cy="648" r="5" fill={windowGlow} style={{ filter: "blur(3px)" }} />
     </g>
   );
 }

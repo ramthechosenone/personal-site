@@ -1583,6 +1583,20 @@
   .polaroid { opacity: 1; }
 }
 
+/* Train crossing the Godavari bridge — loops every ~18s */
+.train-run {
+  animation: trainRun 18s linear infinite;
+  will-change: transform;
+}
+@keyframes trainRun {
+  0%   { transform: translateX(-220px); }
+  55%  { transform: translateX(1950px); }
+  100% { transform: translateX(1950px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .train-run { animation: none; transform: translateX(-220px); }
+}
+
 /* Chamber back button — top-left tap target on chamber subpages */
 .chamber-back {
   position: absolute;
